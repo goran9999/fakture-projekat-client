@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import ListaFaktura from '../components/faktura/ListaFaktura'
 import Faktura from '../models/faktura'
 
+import styles from './HomePage.module.css'
+
 interface Props {
 
 }
@@ -17,9 +19,9 @@ const HomePage = (props: Props) => {
     }, [])
 
     return (
-        <div>
+        <main className={styles.main}>
             <ListaFaktura fakture={fakture} />
-        </div>
+        </main>
     )
 }
 

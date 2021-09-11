@@ -27,14 +27,25 @@ const Adresa = (props: Props) => {
 
     return (
         <>
-            <label htmlFor='postBroj'>Postanski broj</label>
-            <input value={adresa.postBroj} onChange={promeniAdresuHandler} id='postBroj' name='postBroj' />
-            <label htmlFor='grad'>Grad</label>
-            <input value={adresa.grad} onChange={promeniAdresuHandler} id='grad' name='grad' />
-            <label htmlFor='ulica'>Ulica</label>
-            <input value={adresa.ulica} onChange={promeniAdresuHandler} id='ulica' name='ulica' />
-            <label htmlFor='brUlice'>Broj ulice</label>
-            <input value={adresa.brUlice} onChange={promeniAdresuHandler} id='brUlice' name='brUlice' />
+            <div>
+                <label htmlFor='postBroj'>Postanski broj</label>
+                <input value={adresa.postBroj} onChange={promeniAdresuHandler} id='postBroj' name='postBroj' />
+            </div>
+
+            <div>
+                <label htmlFor='grad'>Grad</label>
+                <input value={adresa.grad} onChange={promeniAdresuHandler} id='grad' name='grad' />
+            </div>
+
+            <div>
+                <label htmlFor='ulica'>Ulica</label>
+                <input value={adresa.ulica} onChange={promeniAdresuHandler} id='ulica' name='ulica' />
+            </div>
+
+            <div>
+                <label htmlFor='brUlice'>Broj ulice</label>
+                <input value={adresa.brUlice} onChange={promeniAdresuHandler} id='brUlice' name='brUlice' />
+            </div>
         </>
     )
 }

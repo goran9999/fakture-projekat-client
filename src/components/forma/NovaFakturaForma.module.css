@@ -1,0 +1,52 @@
+.forma {
+    height: 100vh;
+    flex-direction: column;
+    padding: 50px;
+}
+
+.forma > div {
+    margin-bottom: 80px;
+}
+
+.komitenti-wrapper, .kupac-wrapper {
+    display: flex;
+}
+
+.izdavac-wrapper, .kupac-wrapper {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.izdavac-wrapper {
+    margin-right: 7rem;
+}
+
+.izdavac-wrapper > div, .kupac-wrapper > div {
+    margin: 10px;
+}
+
+.radio {
+    display: flex;
+    align-items: center;
+}
+
+.radio > label {
+    margin-right: 5px;
+}
+
+.radio > input {
+    margin-right: 20px;
+}
+
+.table {
+    background-color: lightgrey;
+}
+
+.table > thead > tr > th {
+    padding: 30px;
+}
+
+.table > tbody > tr > td {
+    padding: 30px;
+    text-align: center;
+}

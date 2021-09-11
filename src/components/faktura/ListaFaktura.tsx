@@ -3,6 +3,8 @@ import Faktura from "../../models/faktura";
 import FakturaItem from "./FakturaItem";
 import StavkaFakture from "../../models/stavkaFakture";
 
+import styles from './ListaFaktura.module.css'
+
 interface Props {
     fakture: Faktura[]
 }
@@ -22,7 +24,7 @@ const ListaFaktura = (props: Props) => {
     }
 
     return (
-        <table>
+        <table className={styles.table}>
             <thead>
                 <tr>
                     <th>Broj</th>

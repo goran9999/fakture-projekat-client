@@ -1,0 +1,12 @@
+.table {
+    background-color: lightgrey;
+}
+
+.table > thead > tr > th {
+    padding: 30px;
+}
+
+.table > tbody > tr > td {
+    padding: 30px;
+    text-align: center;
+}

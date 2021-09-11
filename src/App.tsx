@@ -3,6 +3,8 @@ import { Switch, Route } from 'react-router-dom'
 import FakturaDetaljiPage from './pages/FakturaDetaljiPage';
 import HomePage from './pages/HomePage';
 import NovaFakturaPage from './pages/NovaFakturaPage';
+import NotFoundPage from './pages/NotFoundPage'
+import './App.css'
 
 function App() {
   return (
@@ -10,7 +12,8 @@ function App() {
       <Switch>
         <Route path='/dodaj-fakturu'><NovaFakturaPage /></Route>
         <Route path='/fakture/:brojFakture'><FakturaDetaljiPage /></Route>
-        <Route path='/'><HomePage /></Route>
+        <Route path='/' exact><HomePage /></Route>
+        <Route path='*'><NotFoundPage /></Route>
       </Switch>
     </>
   );

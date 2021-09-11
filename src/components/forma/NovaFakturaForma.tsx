@@ -9,6 +9,8 @@ import { TipProizvoda } from "../../models/proizvod"
 import DodavanjeStavke from "./DodavanjeStavke"
 import Komitent from "../../models/komitent"
 
+import styles from './NovaFakturaForma.module.css'
+
 
 const NovaFakturaForma = () => {
 
@@ -26,7 +28,7 @@ const NovaFakturaForma = () => {
     const [izdavac, setIzdavac] = useState<Komitent>({
         pib: '',
         naziv: '',
-        maticniBroj:'',
+        maticniBroj: '',
         adresa: {
             postBroj: 0,
             grad: '',
@@ -36,11 +38,11 @@ const NovaFakturaForma = () => {
         telefon: ''
     })
 
-    const [pravnoLice,setPravnoLice] = useState(true);
+    const [pravnoLice, setPravnoLice] = useState(true);
     const [kupac, setKupac] = useState<Komitent>({
         pib: '',
         naziv: '',
-        maticniBroj:'',
+        maticniBroj: '',
         adresa: {
             postBroj: 0,
             grad: '',
@@ -68,8 +70,8 @@ const NovaFakturaForma = () => {
 
     const sacuvajFakturuHandler = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if(!pravnoLice){
-            kupac.pib=undefined;
+        if (!pravnoLice) {
+            kupac.pib = undefined;
         }
         const faktura: Faktura = {
             broj: brojFakture,
@@ -111,7 +113,7 @@ const NovaFakturaForma = () => {
         setIzdavac({
             pib: '',
             naziv: '',
-            maticniBroj:'',
+            maticniBroj: '',
             adresa: {
                 postBroj: 0,
                 grad: '',
@@ -124,7 +126,7 @@ const NovaFakturaForma = () => {
         setKupac({
             pib: '',
             naziv: '',
-            maticniBroj:'',
+            maticniBroj: '',
             adresa: {
                 postBroj: 0,
                 grad: '',
@@ -241,94 +243,148 @@ const NovaFakturaForma = () => {
     }
 
     return (
-        <form onSubmit={sacuvajFakturuHandler}>
-            <h1>Izdavac</h1>
-            <label htmlFor='pibIzdavaca'>PIB</label>
-            <input value={izdavac.pib} onChange={promeniIzdavacaHandler} id='pibIzdavaca' name='pib' />
-            <label htmlFor='maticniBrojIzdavaca'>Maticni broj</label>
-            <input value={izdavac.maticniBroj} onChange={promeniIzdavacaHandler} id='maticniBrojIzdavaca' name='maticniBroj' />
-            <label htmlFor='nazivIzdavaca'>Naziv</label>
-            <input value={izdavac.naziv} onChange={promeniIzdavacaHandler} id='nazivIzdavaca' name='naziv' />
-            <Adresa onChange={promeniAdresuIzdavacaHandler} />
-            <label htmlFor='telefonIzdavaca'>Telefon</label>
-            <input value={izdavac.telefon} onChange={promeniIzdavacaHandler} id='telefonIzdavaca' name='telefon' />
+        <form className={styles.forma} onSubmit={sacuvajFakturuHandler}>
 
-            <h1>Kupac</h1>
-            <label htmlFor='fizicko'>Fizicko lice</label>
-            <input type='radio' id='fizicko' checked={!pravnoLice} onChange={()=>setPravnoLice(false)} />   
-            <label htmlFor='pravno'>Pravno lice</label>
-            <input type='radio' id='pravno' checked={pravnoLice} onChange={()=>setPravnoLice(true)} />        
-            {pravnoLice&&<><label htmlFor='pibKupca'>PIB</label>
-            <input value={kupac.pib} onChange={promeniKupcaHandler} id='pibKupca' name='pib' /></>}
-            <label htmlFor='maticniBrojKupca'>Maticni broj</label>
-            <input value={kupac.maticniBroj} onChange={promeniKupcaHandler} id='maticniBrojKupca' name='maticniBroj' />
-            <label htmlFor='nazivKupca'>Naziv</label>
-            <input value={kupac.naziv} onChange={promeniKupcaHandler} id='nazivKupca' name='naziv' />
-            <Adresa onChange={promeniAdresuKupcaHandler} />
-            <label htmlFor='telefonKupca'>Telefon</label>
-            <input value={kupac.telefon} onChange={promeniKupcaHandler} id='telefonKupca' name='telefon' />
+            <div className={styles['komitenti-wrapper']}>
+                <div>
+                    <h1>Izdavac</h1>
+                    <div className={styles['izdavac-wrapper']}>
+                        <div>
+                            <label htmlFor='pibIzdavaca'>PIB</label>
+                            <input value={izdavac.pib} onChange={promeniIzdavacaHandler} id='pibIzdavaca' name='pib' />
+                        </div>
+                        <div>
+                            <label htmlFor='maticniBrojIzdavaca'>Maticni broj</label>
+                            <input value={izdavac.maticniBroj} onChange={promeniIzdavacaHandler} id='maticniBrojIzdavaca' name='maticniBroj' />
+                        </div>
+                        <div>
+                            <label htmlFor='nazivIzdavaca'>Naziv</label>
+                            <input value={izdavac.naziv} onChange={promeniIzdavacaHandler} id='nazivIzdavaca' name='naziv' />
+                        </div>
 
-            <h1>Unos stavki</h1>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Sifra</th>
-                        <th>Naziv</th>
-                        <th>Tip</th>
-                        <th>Kolicina</th>
-                        <th>Osnovna cena</th>
-                        <th>PDV</th>
-                        <th>Iznos PDV</th>
-                        <th>Ukupna vrednost</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {stavkeFakture.map(s =>
-                        <DodataStavkaItem
-                            key={s.proizvod.sifra}
-                            sifraProizvoda={s.proizvod.sifra}
-                            nazivProizvoda={s.proizvod.naziv}
-                            tipProizvoda={s.proizvod.tip}
-                            osnovnaCenaProizvoda={s.proizvod.osnovnaCena}
-                            pdvProizvoda={s.proizvod.pdv}
-                            kolicina={s.kolicina}
-                            onUkloniStavku={ukloniStavku}
-                            onIzmeniStavku={izmeniStavku}
-                        />
-                    )}
-                </tbody>
-            </table>
+                        <div>
+                            <label htmlFor='telefonIzdavaca'>Telefon</label>
+                            <input value={izdavac.telefon} onChange={promeniIzdavacaHandler} id='telefonIzdavaca' name='telefon' />
+                        </div>
 
-            {prikaziUnosNoveStavke && <DodavanjeStavke stavka={stavka} onSacuvajStavku={dodajStavku} onOdustaniOdUnosa={() => setPrikaziUnosNoveStavke(false)} />}
-            {!prikaziUnosNoveStavke && <button onClick={dodajStavkuHandler}>Dodaj novu stavku</button>}
+                        <Adresa onChange={promeniAdresuIzdavacaHandler} />
+
+                    </div>
+
+                </div>
+
+                <div>
+                    <h1>Kupac</h1>
+                    <div className={styles['kupac-wrapper']}>
+                        <div className={styles.radio}>
+                            <label htmlFor='pravno'>Pravno lice</label>
+                            <input type='radio' id='pravno' checked={pravnoLice} onChange={() => setPravnoLice(true)} />
+                            <label htmlFor='fizicko'>Fizicko lice</label>
+                            <input type='radio' id='fizicko' checked={!pravnoLice} onChange={() => setPravnoLice(false)} />
+                        </div>
 
 
-            <h1>Dodatne informacije</h1>
+                        <div style={{ visibility: pravnoLice ? 'visible' : 'hidden' }}>
+                            <label htmlFor='pibKupca'>PIB</label>
+                            <input value={kupac.pib} onChange={promeniKupcaHandler} id='pibKupca' name='pib' />
+                        </div>
 
-            <label htmlFor={brojFakture}>Broj fakture</label>
-            <input id='brojFakture' value={brojFakture} onChange={promeniBrojFaktureHandler} />
+                        <div>
+                            <label htmlFor='maticniBrojKupca'>Maticni broj</label>
+                            <input value={kupac.maticniBroj} onChange={promeniKupcaHandler} id='maticniBrojKupca' name='maticniBroj' />
+                        </div>
 
-            <h3>Mesto izdavanja</h3>
-            <Adresa onChange={promeniMestoIzdavanjaHandler} />
+                        <div>
+                            <label htmlFor='nazivKupca'>Naziv</label>
+                            <input value={kupac.naziv} onChange={promeniKupcaHandler} id='nazivKupca' name='naziv' />
+                        </div>
 
-            <label htmlFor='datumIzdavanja'>Datum izdavanja</label>
-            <input type='date' ref={datumIzdavanjaRef} onChange={promeniDatumIzdavanjaHandler} id='datumIzdavanja' />
-            <label htmlFor='rokPlacanja'>Rok placanja</label>
-            <input type='date' ref={rokPlacanjaRef} onChange={promeniRokPlacanjaHandler} />
+                        <div>
+                            <label htmlFor='telefonKupca'>Telefon</label>
+                            <input value={kupac.telefon} onChange={promeniKupcaHandler} id='telefonKupca' name='telefon' />
+                        </div>
 
-            <label htmlFor='valutaPlacanja'>Valuta placanja</label>
-            <select value={valutaPlacanja} onChange={promeniValutuPlacanjaHandler} id='valutaPlacanja' name='valutaPlacanja'>
-                <option value={Valuta.DINAR}>RSD</option>
-                <option value={Valuta.EVRO}>EUR</option>
-                <option value={Valuta.DOLAR}>USD</option>
-            </select>
+                        <Adresa onChange={promeniAdresuKupcaHandler} />
+                    </div>
+                </div>
+            </div>
 
-            <label htmlFor='statusFakture'>Status fakture</label>
-            <select value={statusFakture} onChange={promeniStatusFaktureHandler} id='statusFakture' name='statusFakture'>
-                <option value={StatusFakture.PLACENA}>Placena</option>
-                <option value={StatusFakture.POSLATA}>Poslata</option>
-                <option value={StatusFakture.PRIPREMA}>Priprema</option>
-            </select>
+
+
+            <div>
+
+                <h1>Unos stavki</h1>
+                <table className={styles.table}>
+                    <thead>
+                        <tr>
+                            <th>Sifra</th>
+                            <th>Naziv</th>
+                            <th>Tip</th>
+                            <th>Kolicina</th>
+                            <th>Osnovna cena</th>
+                            <th>PDV</th>
+                            <th>Iznos PDV</th>
+                            <th>Ukupna vrednost</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {stavkeFakture.map(s =>
+                            <DodataStavkaItem
+                                key={s.proizvod.sifra}
+                                sifraProizvoda={s.proizvod.sifra}
+                                nazivProizvoda={s.proizvod.naziv}
+                                tipProizvoda={s.proizvod.tip}
+                                osnovnaCenaProizvoda={s.proizvod.osnovnaCena}
+                                pdvProizvoda={s.proizvod.pdv}
+                                kolicina={s.kolicina}
+                                onUkloniStavku={ukloniStavku}
+                                onIzmeniStavku={izmeniStavku}
+                            />
+                        )}
+                    </tbody>
+                </table>
+
+                {prikaziUnosNoveStavke && <DodavanjeStavke stavka={stavka} onSacuvajStavku={dodajStavku} onOdustaniOdUnosa={() => setPrikaziUnosNoveStavke(false)} />}
+                {!prikaziUnosNoveStavke && <button onClick={dodajStavkuHandler}>Dodaj novu stavku</button>}
+
+            </div>
+
+
+
+            <div>
+
+                <h1>Dodatne informacije</h1>
+
+                <div className={styles['dodatne-info-wrapper']}>
+                    <label htmlFor={brojFakture}>Broj fakture</label>
+                    <input id='brojFakture' value={brojFakture} onChange={promeniBrojFaktureHandler} />
+
+                    <h3>Mesto izdavanja</h3>
+                    <Adresa onChange={promeniMestoIzdavanjaHandler} />
+
+                    <label htmlFor='datumIzdavanja'>Datum izdavanja</label>
+                    <input type='date' ref={datumIzdavanjaRef} onChange={promeniDatumIzdavanjaHandler} id='datumIzdavanja' />
+                    <label htmlFor='rokPlacanja'>Rok placanja</label>
+                    <input type='date' ref={rokPlacanjaRef} onChange={promeniRokPlacanjaHandler} />
+
+                    <label htmlFor='valutaPlacanja'>Valuta placanja</label>
+                    <select value={valutaPlacanja} onChange={promeniValutuPlacanjaHandler} id='valutaPlacanja' name='valutaPlacanja'>
+                        <option value={Valuta.DINAR}>RSD</option>
+                        <option value={Valuta.EVRO}>EUR</option>
+                        <option value={Valuta.DOLAR}>USD</option>
+                    </select>
+
+                    <label htmlFor='statusFakture'>Status fakture</label>
+                    <select value={statusFakture} onChange={promeniStatusFaktureHandler} id='statusFakture' name='statusFakture'>
+                        <option value={StatusFakture.PLACENA}>Placena</option>
+                        <option value={StatusFakture.POSLATA}>Poslata</option>
+                        <option value={StatusFakture.PRIPREMA}>Priprema</option>
+                    </select>
+
+                </div>
+            </div>
+
+
 
             <button>Sacuvaj fakturu</button>
         </form>
