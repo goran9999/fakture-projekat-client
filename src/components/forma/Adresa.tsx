@@ -1,54 +1,57 @@
-import React,{useState,useEffect} from "react";
+import React, { useState } from "react";
 import AdresaModel from "../../models/adresa";
 
 interface Props {
-    sacuvajAdresu:(adresa:AdresaModel)=>void
+    sacuvajAdresu: (adresa: AdresaModel) => void
 }
 
-const Adresa = (props:Props) =>{
+const Adresa = (props: Props) => {
 
-    const [ulicaPrimaoca,setUlicaPrimaoca] = useState<string>();
-    const [brojUlicePrimaoca,setBrojUlicePrimaoca] = useState<string>();
-    const [gradPrimaoca,setGradPrimaoca] = useState<string>();
-    const [postanskiBrojPrimaoca,setPostanskiBroj] = useState<number>();
+    const [grad, setGrad] = useState('');
+    const [postBroj, setPostBroj] = useState<number>();
+    const [ulica, setUlica] = useState('');
+    const [brUlice, setBrUlice] = useState('');
 
 
-    useEffect(()=>{
-        if(ulicaPrimaoca && brojUlicePrimaoca && gradPrimaoca && postanskiBrojPrimaoca){
-             const adresa:AdresaModel={
-              grad:gradPrimaoca,
-              ulica:ulicaPrimaoca,
-              brUlice:brojUlicePrimaoca,
-              postBroj:postanskiBrojPrimaoca
-             }
-             props.sacuvajAdresu(adresa);
+    if (grad && postBroj && ulica && brUlice) {
+        const adresa: AdresaModel = {
+            grad: grad,
+            ulica: ulica,
+            brUlice: brUlice,
+            postBroj: postBroj
         }
-     },[ulicaPrimaoca,brojUlicePrimaoca,gradPrimaoca,postanskiBrojPrimaoca])
-     
 
-    const postaviUlicu = (event:React.ChangeEvent<HTMLInputElement>) =>{
-        setUlicaPrimaoca(event.target.value);
-    }
-    const postaviBrojUlice = (event:React.ChangeEvent<HTMLInputElement>) =>{
-        setBrojUlicePrimaoca(event.target.value);
-    }
-    const postaviGrad = (event:React.ChangeEvent<HTMLInputElement>) =>{
-        setGradPrimaoca(event.target.value);
-    }
-    const postaviBroj = (event:React.ChangeEvent<HTMLInputElement>) =>{
-        setPostanskiBroj(+event.target.value);
+        props.sacuvajAdresu(adresa);
     }
 
-    return <div>
-        <label htmlFor='ulicaPrimaoca'>Ulica</label>
-            <input onBlur={postaviUlicu} type='text' id='ulicaPrimaoca' />
-            <label htmlFor='brojUlicePrimaoca'>Broj Ulice</label>
-            <input onBlur={postaviBrojUlice} type='text' id='brojUlicaPrimaoca' />
-            <label htmlFor='Primaoca'>Grad</label>
-            <input onBlur={postaviGrad} type='text' id='gradPrimaoca'/>
-            <label htmlFor='postanskiBrojPrimaoca'>Postanski Broj</label>
-            <input onBlur={postaviBroj} type='number' id='postanskiBrojPrimaoca' />
-    </div>
 
+    const promeniGradHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setGrad(event.target.value);
+    }
+
+    const promeniPostBrojHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setPostBroj(+event.target.value);
+    }
+
+    const promeniUlicuHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setUlica(event.target.value);
+    }
+
+    const promeniBrUliceHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setBrUlice(event.target.value);
+    }
+
+    return (
+        <div>
+            <label htmlFor='grad'>Grad</label>
+            <input value={grad} onChange={promeniGradHandler} id='grad' />
+            <label htmlFor='postBroj'>Postanski Broj</label>
+            <input value={postBroj} onChange={promeniPostBrojHandler} id='Postanski' />
+            <label htmlFor='ulica'>Ulica</label>
+            <input value={ulica} onChange={promeniUlicuHandler} id='ulica' />
+            <label htmlFor='brUlice'>Broj Ulice</label>
+            <input value={brUlice} onChange={promeniBrUliceHandler} id='brUlice' />
+        </div>
+    )
 }
 export default Adresa;

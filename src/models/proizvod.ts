@@ -1,12 +1,12 @@
-interface Proizvod{
-    sifra:string;
-    osnovnaCena:number;
-    naziv:string;
-    tip:TipProizvoda;
-    pdv:number;
+interface Proizvod {
+    sifra: string;
+    osnovnaCena: number;
+    naziv: string;
+    tip: TipProizvoda;
+    pdv: number;
 }
 
-export enum TipProizvoda{
+export enum TipProizvoda {
     PROIZVOD = 'proizvod',
     USLUGA = 'usluga'
 }
