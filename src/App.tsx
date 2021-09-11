@@ -1,10 +1,17 @@
 import React from 'react';
-import NovaFakturaForma from './components/./forma/NovaFakturaForma';
+import { Switch, Route } from 'react-router-dom'
+import FakturaDetaljiPage from './pages/FakturaDetaljiPage';
+import HomePage from './pages/HomePage';
+import NovaFakturaPage from './pages/NovaFakturaPage';
 
 function App() {
   return (
     <>
-      <NovaFakturaForma />
+      <Switch>
+        <Route path='/dodaj-fakturu'><NovaFakturaPage /></Route>
+        <Route path='/fakture/:brojFakture'><FakturaDetaljiPage /></Route>
+        <Route path='/'><HomePage /></Route>
+      </Switch>
     </>
   );
 }

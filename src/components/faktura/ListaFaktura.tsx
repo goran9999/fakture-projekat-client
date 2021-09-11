@@ -22,17 +22,30 @@ const ListaFaktura = (props: Props) => {
     }
 
     return (
-        <ul>
-            {props.fakture.map(f =>
-                <FakturaItem
-                    key={f.broj}
-                    broj={f.broj}
-                    imeIzdavaca={f.izdavac.naziv}
-                    ukupanIznos={izracunajUkupanIznos(f.stavke)}
-                    imeKupca={f.kupac.naziv}
-                />
-            )}
-        </ul>
+        <table>
+            <thead>
+                <tr>
+                    <th>Broj</th>
+                    <th>Izdavac</th>
+                    <th>Kupac</th>
+                    <th>Iznos</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {props.fakture.map(f =>
+                    <FakturaItem
+                        key={f.broj}
+                        broj={f.broj}
+                        imeIzdavaca={f.izdavac.naziv}
+                        imeKupca={f.kupac.naziv}
+                        ukupanIznos={izracunajUkupanIznos(f.stavke)}
+                        status={f.status}
+                    />
+                )}
+            </tbody>
+
+        </table>
     )
 
 }
