@@ -1,8 +1,7 @@
-import Proizvod from "./proizvod";
+import Proizvod from './proizvod'
 
-interface StavkaFakture {
-    kolicina: number,
-    proizvod: Proizvod,
+export default interface StavkaFakture {
+    proizvod: Proizvod
+    kolicina: number
 }
 
-export default StavkaFakture;

@@ -1,18 +1,18 @@
 import Adresa from "./adresa";
-import Entitet from "./entitet";
-import StavkaFakture from "./stavkaFakture";
-import Valuta from './valuta'
+import Entitet from './entitet'
+import StavkaFakture from './stavkaFakture'
+import Valuta from "./valuta";
 
-interface Faktura {
-    broj: string;
-    kupac: Entitet;
-    stavke: StavkaFakture[];
-    izdavac: Entitet;
-    datumIzdavanja: Date;
-    rokPlacanja: Date,
+export default interface Faktura {
+    broj: string
+    izdavac: Entitet
+    kupac: Entitet
+    datumIzdavanja: Date
+    mestoIzdavanja: Adresa
+    rokPlacanja: Date
+    stavke: StavkaFakture[]
     valutaPlacanja: Valuta
-    mestoIzdavanja: Adresa;
-    status: StatusFakture;
+    status: StatusFakture
 }
 
 export enum StatusFakture {
@@ -23,4 +23,3 @@ export enum StatusFakture {
     PRIPREMA = "priprema"
 }
 
-export default Faktura;

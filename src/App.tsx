@@ -1,10 +1,11 @@
 import React from 'react';
-import NovaFaktura from './components/forma/NovaFaktura';
+import NovaFakturaForma from './components/./forma/NovaFakturaForma';
 
 function App() {
-
   return (
-    <NovaFaktura />
+    <>
+      <NovaFakturaForma />
+    </>
   );
 }
 
