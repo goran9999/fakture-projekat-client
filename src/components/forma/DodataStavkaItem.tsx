@@ -1,4 +1,6 @@
+import React from 'react';
 import { TipProizvoda } from '../../models/proizvod'
+import StavkaFakture from '../../models/stavkaFakture';
 
 interface Props {
     sifraProizvoda: string
@@ -7,7 +9,8 @@ interface Props {
     osnovnaCenaProizvoda: number
     pdvProizvoda: number
     kolicina: number
-    onUkloniStavku: (sifraProizvoda: string) => void
+    onUkloniStavku: (sifraProizvoda: string) => void,
+    onIzmeniStavku: (stavka: StavkaFakture) => void,
 }
 
 const DodataStavkaItem = (props: Props) => {
@@ -16,6 +19,23 @@ const DodataStavkaItem = (props: Props) => {
 
     const ukloniStavkuHandler = () => {
         props.onUkloniStavku(sifraProizvoda);
+    }
+
+    const izmeniStavkuHandler = () => {
+
+        const stavka: StavkaFakture = {
+            proizvod: {
+                sifra: sifraProizvoda,
+                naziv: nazivProizvoda,
+                tip: tipProizvoda,
+                osnovnaCena: osnovnaCenaProizvoda,
+                pdv: pdvProizvoda
+            },
+            kolicina: kolicina
+        }
+
+        props.onIzmeniStavku(stavka);
+
     }
 
     return (
@@ -29,10 +49,10 @@ const DodataStavkaItem = (props: Props) => {
             <td>{osnovnaCenaProizvoda * pdvProizvoda / 100}</td>
             <td>{(osnovnaCenaProizvoda + (osnovnaCenaProizvoda * pdvProizvoda) / 100) * kolicina}</td>
             <td>
-                <button>Izmeni</button>
+                <button type='button' onClick={izmeniStavkuHandler}>Izmeni</button>
             </td>
             <td>
-                <button onClick={ukloniStavkuHandler}>Ukloni</button>
+                <button type='button' onClick={ukloniStavkuHandler}>Ukloni</button>
             </td>
         </tr>
     )

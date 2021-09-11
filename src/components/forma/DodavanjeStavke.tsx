@@ -1,38 +1,43 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import StavkaFakture from '../../models/stavkaFakture'
-import Proizvod, { TipProizvoda } from '../../models/proizvod'
+import { TipProizvoda } from '../../models/proizvod'
 
 interface Props {
     onSacuvajStavku: (stavka: StavkaFakture) => void
     onOdustaniOdUnosa: () => void
+    stavka: StavkaFakture
 }
 
 const DodavanjeStavke = (props: Props) => {
 
-    const [sifra, setSifra] = useState('');
-    const [naziv, setNaziv] = useState('');
-    const [tip, setTip] = useState(TipProizvoda.PROIZVOD)
-    const [osnovnaCena, setOsnovnaCena] = useState(0);
-    const [pdv, setPdv] = useState(0);
-    const [kolicina, setKolicina] = useState(1);
+    const [stavka, setStavka] = useState<StavkaFakture>({
+        proizvod: {
+            sifra: '',
+            naziv: '',
+            osnovnaCena: 0,
+            pdv: 0,
+            tip: TipProizvoda.PROIZVOD
+        },
+        kolicina: 0
+    })
 
+    useEffect(() => {
+        setStavka(props.stavka);
+    }, [props.stavka]);
 
     const sacuvajStavkuHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
-        const proizvod: Proizvod = {
-            sifra: sifra,
-            naziv: naziv,
-            tip: tip,
-            osnovnaCena: osnovnaCena,
-            pdv: pdv
-        };
-
-        const stavka: StavkaFakture = {
-            proizvod: proizvod,
-            kolicina: kolicina
-        }
-
         props.onSacuvajStavku(stavka)
-        resetujStavku()
+        resetujStavku();
+        setStavka({
+            proizvod: {
+                sifra: '',
+                naziv: '',
+                osnovnaCena: 0,
+                pdv: 0,
+                tip: TipProizvoda.PROIZVOD
+            },
+            kolicina: 0
+        })
     }
 
     const odustaniOdUnosaHandler = () => {
@@ -41,49 +46,94 @@ const DodavanjeStavke = (props: Props) => {
     }
 
     const resetujStavku = () => {
-        setSifra('');
-        setNaziv('');
-        setKolicina(1);
-        setTip(TipProizvoda.PROIZVOD)
-        setOsnovnaCena(0);
-        setPdv(0);
+        setStavka({
+            proizvod: {
+                sifra: '',
+                naziv: '',
+                osnovnaCena: 0,
+                pdv: 0,
+                tip: TipProizvoda.PROIZVOD
+            },
+            kolicina: 0
+        })
     }
 
-    const promeniSifruHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSifra(e.target.value)
+    const promeniSifruProizvodaHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const izmenjenaStavka: StavkaFakture = {
+            ...stavka,
+            proizvod: {
+                ...stavka.proizvod,
+                sifra: e.target.value
+            }
+        }
+        setStavka(izmenjenaStavka)
     }
 
-    const promeniNazivHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setNaziv(e.target.value)
+    const promeniNazivProizvodaHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const izmenjenaStavka: StavkaFakture = {
+            ...stavka,
+            proizvod: {
+                ...stavka.proizvod,
+                naziv: e.target.value
+            }
+        }
+        setStavka(izmenjenaStavka)
     }
 
-    const promeniOsnovnuCenuHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setOsnovnaCena(+e.target.value)
+    const promeniOsnovnuCenuProizvodaHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const izmenjenaStavka: StavkaFakture = {
+            ...stavka,
+            proizvod: {
+                ...stavka.proizvod,
+                osnovnaCena: +e.target.value
+            }
+        }
+        setStavka(izmenjenaStavka)
     }
 
-    const promeniPdvHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setPdv(+e.target.value)
+    const promeniPdvProizvodaHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const izmenjenaStavka: StavkaFakture = {
+            ...stavka,
+            proizvod: {
+                ...stavka.proizvod,
+                pdv: +e.target.value
+            }
+        }
+        setStavka(izmenjenaStavka)
     }
 
-    const promeniTipHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setTip(e.target.value as TipProizvoda)
+    const promeniTipProizvodaHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const izmenjenaStavka: StavkaFakture = {
+            ...stavka,
+            proizvod: {
+                ...stavka.proizvod,
+                tip: e.target.value as TipProizvoda
+            }
+        }
+        setStavka(izmenjenaStavka)
     }
 
     const promeniKolicinuHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setKolicina(+e.target.value)
+        const izmenjenaStavka: StavkaFakture = {
+            proizvod: {
+                ...stavka.proizvod
+            },
+            kolicina: +e.target.value
+        }
+        setStavka(izmenjenaStavka)
     }
 
     return (
         <>
-            <input value={sifra} onChange={promeniSifruHandler} />
-            <input value={naziv} onChange={promeniNazivHandler} />
-            <select value={tip} onChange={promeniTipHandler}>
+            <input value={stavka.proizvod.sifra} onChange={promeniSifruProizvodaHandler} />
+            <input value={stavka.proizvod.naziv} onChange={promeniNazivProizvodaHandler} />
+            <select value={stavka.proizvod.tip} onChange={promeniTipProizvodaHandler}>
                 <option value={TipProizvoda.PROIZVOD}>Proizvod</option>
                 <option value={TipProizvoda.USLUGA}>Usluga</option>
             </select>
-            <input value={kolicina} onChange={promeniKolicinuHandler} />
-            <input value={osnovnaCena} onChange={promeniOsnovnuCenuHandler} />
-            <input value={pdv} onChange={promeniPdvHandler} />
+            <input value={stavka.kolicina} onChange={promeniKolicinuHandler} />
+            <input value={stavka.proizvod.osnovnaCena} onChange={promeniOsnovnuCenuProizvodaHandler} />
+            <input value={stavka.proizvod.pdv} onChange={promeniPdvProizvodaHandler} />
             <button onClick={sacuvajStavkuHandler}>Sacuvaj stavku</button>
             <button onClick={odustaniOdUnosaHandler}>Odustani</button>
         </>
@@ -91,3 +141,4 @@ const DodavanjeStavke = (props: Props) => {
 }
 
 export default DodavanjeStavke
+

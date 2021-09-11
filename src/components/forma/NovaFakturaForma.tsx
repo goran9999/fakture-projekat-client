@@ -6,12 +6,23 @@ import StavkaFakture from "../../models/stavkaFakture"
 import Valuta from "../../models/valuta"
 import Adresa from "./Adresa"
 import DodataStavkaItem from "./DodataStavkaItem"
+import { TipProizvoda } from "../../models/proizvod"
 import DodavanjeStavke from "./DodavanjeStavke"
 
 
 const NovaFakturaForma = () => {
 
     const [brojFakture, setBrojFakture] = useState('');
+    const [stavka, setStavka] = useState({
+        proizvod: {
+            sifra: '',
+            naziv: '',
+            osnovnaCena: 0,
+            pdv: 0,
+            tip: TipProizvoda.PROIZVOD
+        },
+        kolicina: 0
+    })
     const [izdavac, setIzdavac] = useState<PravnoLice>({
         pib: '',
         naziv: '',
@@ -201,6 +212,28 @@ const NovaFakturaForma = () => {
         })
     }
 
+    const izmeniStavku = (stavka: StavkaFakture) => {
+        setStavka(stavka);
+        setStavkeFakture(prevStavke => {
+            return prevStavke.filter(s => s.proizvod.sifra !== stavka.proizvod.sifra);
+        })
+        setPrikaziUnosNoveStavke(true);
+    }
+
+    const dodajStavkuHandler = () => {
+        setStavka({
+            proizvod: {
+                sifra: '',
+                naziv: '',
+                osnovnaCena: 0,
+                pdv: 0,
+                tip: TipProizvoda.PROIZVOD
+            },
+            kolicina: 0
+        })
+        setPrikaziUnosNoveStavke(true);
+    }
+
     return (
         <form onSubmit={sacuvajFakturuHandler}>
             <h1>Izdavac</h1>
@@ -246,13 +279,14 @@ const NovaFakturaForma = () => {
                             pdvProizvoda={s.proizvod.pdv}
                             kolicina={s.kolicina}
                             onUkloniStavku={ukloniStavku}
+                            onIzmeniStavku={izmeniStavku}
                         />
                     )}
                 </tbody>
             </table>
 
-            {prikaziUnosNoveStavke && <DodavanjeStavke onSacuvajStavku={dodajStavku} onOdustaniOdUnosa={() => setPrikaziUnosNoveStavke(false)} />}
-            {!prikaziUnosNoveStavke && <button onClick={() => setPrikaziUnosNoveStavke(true)}>Dodaj novu stavku</button>}
+            {prikaziUnosNoveStavke && <DodavanjeStavke stavka={stavka} onSacuvajStavku={dodajStavku} onOdustaniOdUnosa={() => setPrikaziUnosNoveStavke(false)} />}
+            {!prikaziUnosNoveStavke && <button onClick={dodajStavkuHandler}>Dodaj novu stavku</button>}
 
 
             <h1>Dodatne informacije</h1>

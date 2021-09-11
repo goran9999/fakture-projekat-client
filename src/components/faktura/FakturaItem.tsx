@@ -18,7 +18,6 @@ const FakturaItem = (props: Props) => {
             </span>
             <p>Ukupan iznos:{props.ukupanIznos}</p>
             <button>Detalji</button>
-            <button>Izmeni</button>
         </li>
     )
 
