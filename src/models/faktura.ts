@@ -1,12 +1,12 @@
 import Adresa from "./adresa";
-import Entitet from './entitet'
+import Komitent from "./komitent";
 import StavkaFakture from './stavkaFakture'
 import Valuta from "./valuta";
 
 export default interface Faktura {
     broj: string
-    izdavac: Entitet
-    kupac: Entitet
+    izdavac:Komitent
+    kupac: Komitent
     datumIzdavanja: Date
     mestoIzdavanja: Adresa
     rokPlacanja: Date

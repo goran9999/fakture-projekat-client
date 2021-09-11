@@ -1,6 +1,5 @@
 import React, { useRef, useState } from "react"
 import AdresaModel from "../../models/adresa"
-import { PravnoLice } from '../../models/entitet'
 import Faktura, { StatusFakture } from "../../models/faktura"
 import StavkaFakture from "../../models/stavkaFakture"
 import Valuta from "../../models/valuta"
@@ -8,6 +7,7 @@ import Adresa from "./Adresa"
 import DodataStavkaItem from "./DodataStavkaItem"
 import { TipProizvoda } from "../../models/proizvod"
 import DodavanjeStavke from "./DodavanjeStavke"
+import Komitent from "../../models/komitent"
 
 
 const NovaFakturaForma = () => {
@@ -23,9 +23,10 @@ const NovaFakturaForma = () => {
         },
         kolicina: 0
     })
-    const [izdavac, setIzdavac] = useState<PravnoLice>({
+    const [izdavac, setIzdavac] = useState<Komitent>({
         pib: '',
         naziv: '',
+        maticniBroj:'',
         adresa: {
             postBroj: 0,
             grad: '',
@@ -35,9 +36,11 @@ const NovaFakturaForma = () => {
         telefon: ''
     })
 
-    const [kupac, setKupac] = useState<PravnoLice>({
+    const [pravnoLice,setPravnoLice] = useState(true);
+    const [kupac, setKupac] = useState<Komitent>({
         pib: '',
         naziv: '',
+        maticniBroj:'',
         adresa: {
             postBroj: 0,
             grad: '',
@@ -57,7 +60,6 @@ const NovaFakturaForma = () => {
     })
 
     const [stavkeFakture, setStavkeFakture] = useState<StavkaFakture[]>([])
-
     const [prikaziUnosNoveStavke, setPrikaziUnosNoveStavke] = useState(false);
 
     // refs
@@ -66,7 +68,9 @@ const NovaFakturaForma = () => {
 
     const sacuvajFakturuHandler = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
+        if(!pravnoLice){
+            kupac.pib=undefined;
+        }
         const faktura: Faktura = {
             broj: brojFakture,
             izdavac: izdavac,
@@ -107,6 +111,7 @@ const NovaFakturaForma = () => {
         setIzdavac({
             pib: '',
             naziv: '',
+            maticniBroj:'',
             adresa: {
                 postBroj: 0,
                 grad: '',
@@ -119,6 +124,7 @@ const NovaFakturaForma = () => {
         setKupac({
             pib: '',
             naziv: '',
+            maticniBroj:'',
             adresa: {
                 postBroj: 0,
                 grad: '',
@@ -143,7 +149,7 @@ const NovaFakturaForma = () => {
 
     const promeniIzdavacaHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         const imePolja = e.target.name
-        const izmenjenIzdavac: PravnoLice = {
+        const izmenjenIzdavac: Komitent = {
             ...izdavac,
             [imePolja]: e.target.value
         }
@@ -151,7 +157,7 @@ const NovaFakturaForma = () => {
     }
 
     const promeniAdresuIzdavacaHandler = (adresa: AdresaModel) => {
-        const izmenjenIzdavac: PravnoLice = {
+        const izmenjenIzdavac: Komitent = {
             ...izdavac,
             adresa: adresa
         }
@@ -160,7 +166,7 @@ const NovaFakturaForma = () => {
 
     const promeniKupcaHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         const imePolja = e.target.name
-        const izmenjenKupac: PravnoLice = {
+        const izmenjenKupac: Komitent = {
             ...kupac,
             [imePolja]: e.target.value
         }
@@ -168,7 +174,7 @@ const NovaFakturaForma = () => {
     }
 
     const promeniAdresuKupcaHandler = (adresa: AdresaModel) => {
-        const izmenjenKupac: PravnoLice = {
+        const izmenjenKupac: Komitent = {
             ...kupac,
             adresa: adresa
         }
@@ -239,6 +245,8 @@ const NovaFakturaForma = () => {
             <h1>Izdavac</h1>
             <label htmlFor='pibIzdavaca'>PIB</label>
             <input value={izdavac.pib} onChange={promeniIzdavacaHandler} id='pibIzdavaca' name='pib' />
+            <label htmlFor='maticniBrojIzdavaca'>Maticni broj</label>
+            <input value={izdavac.maticniBroj} onChange={promeniIzdavacaHandler} id='maticniBrojIzdavaca' name='maticniBroj' />
             <label htmlFor='nazivIzdavaca'>Naziv</label>
             <input value={izdavac.naziv} onChange={promeniIzdavacaHandler} id='nazivIzdavaca' name='naziv' />
             <Adresa onChange={promeniAdresuIzdavacaHandler} />
@@ -246,8 +254,14 @@ const NovaFakturaForma = () => {
             <input value={izdavac.telefon} onChange={promeniIzdavacaHandler} id='telefonIzdavaca' name='telefon' />
 
             <h1>Kupac</h1>
-            <label htmlFor='pibKupca'>PIB</label>
-            <input value={kupac.pib} onChange={promeniKupcaHandler} id='pibKupca' name='pib' />
+            <label htmlFor='fizicko'>Fizicko lice</label>
+            <input type='radio' id='fizicko' checked={!pravnoLice} onChange={()=>setPravnoLice(false)} />   
+            <label htmlFor='pravno'>Pravno lice</label>
+            <input type='radio' id='pravno' checked={pravnoLice} onChange={()=>setPravnoLice(true)} />        
+            {pravnoLice&&<><label htmlFor='pibKupca'>PIB</label>
+            <input value={kupac.pib} onChange={promeniKupcaHandler} id='pibKupca' name='pib' /></>}
+            <label htmlFor='maticniBrojKupca'>Maticni broj</label>
+            <input value={kupac.maticniBroj} onChange={promeniKupcaHandler} id='maticniBrojKupca' name='maticniBroj' />
             <label htmlFor='nazivKupca'>Naziv</label>
             <input value={kupac.naziv} onChange={promeniKupcaHandler} id='nazivKupca' name='naziv' />
             <Adresa onChange={promeniAdresuKupcaHandler} />
