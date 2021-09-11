@@ -6,7 +6,7 @@ import StavkaFakture from "../../models/stavkaFakture"
 import Valuta from "../../models/valuta"
 import Adresa from "./Adresa"
 import DodataStavkaItem from "./DodataStavkaItem"
-import DodavanjeStavki from "./DodavanjeStavki"
+import DodavanjeStavke from "./DodavanjeStavke"
 
 
 const NovaFakturaForma = () => {
@@ -251,7 +251,7 @@ const NovaFakturaForma = () => {
                 </tbody>
             </table>
 
-            {prikaziUnosNoveStavke && <DodavanjeStavki onSacuvajStavku={dodajStavku} onOdustaniOdUnosa={() => setPrikaziUnosNoveStavke(false)} />}
+            {prikaziUnosNoveStavke && <DodavanjeStavke onSacuvajStavku={dodajStavku} onOdustaniOdUnosa={() => setPrikaziUnosNoveStavke(false)} />}
             {!prikaziUnosNoveStavke && <button onClick={() => setPrikaziUnosNoveStavke(true)}>Dodaj novu stavku</button>}
 
 
