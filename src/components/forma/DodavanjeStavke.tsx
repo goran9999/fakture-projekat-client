@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import StavkaFakture from '../../models/stavkaFakture'
 import { TipProizvoda } from '../../models/proizvod'
-
+import Modal from '../../UI/Modal'
+import styles from './DodavanjeStavke.module.css'
 interface Props {
     onSacuvajStavku: (stavka: StavkaFakture) => void
     onOdustaniOdUnosa: () => void
-    stavka: StavkaFakture
+    stavka: StavkaFakture,
 }
 
 const DodavanjeStavke = (props: Props) => {
@@ -124,19 +125,31 @@ const DodavanjeStavke = (props: Props) => {
     }
 
     return (
-        <>
-            <input value={stavka.proizvod.sifra} onChange={promeniSifruProizvodaHandler} />
-            <input value={stavka.proizvod.naziv} onChange={promeniNazivProizvodaHandler} />
+        <Modal onZatvori={props.onOdustaniOdUnosa}>
+             <tr className={styles.zaglavlje}>
+                <th>Sifra</th>  
+                <th>Naziv</th>
+                <th style={{paddingLeft:'50px'}}>Tip</th>
+                <th>Kolicina</th>
+                <th>Osnovna cena</th>
+                <th>PDV</th>
+                    </tr>
+            <div className={styles['stavka-forma']}>
+            <input style={{marginLeft:'5px'}} size={8} value={stavka.proizvod.sifra} onChange={promeniSifruProizvodaHandler} />
+            <input size={12} value={stavka.proizvod.naziv} onChange={promeniNazivProizvodaHandler} />
             <select value={stavka.proizvod.tip} onChange={promeniTipProizvodaHandler}>
                 <option value={TipProizvoda.PROIZVOD}>Proizvod</option>
                 <option value={TipProizvoda.USLUGA}>Usluga</option>
             </select>
-            <input value={stavka.kolicina} onChange={promeniKolicinuHandler} />
-            <input value={stavka.proizvod.osnovnaCena} onChange={promeniOsnovnuCenuProizvodaHandler} />
-            <input value={stavka.proizvod.pdv} onChange={promeniPdvProizvodaHandler} />
+            <input size={5} value={stavka.kolicina} onChange={promeniKolicinuHandler} />
+            <input size={8} className={styles['osnovna-cena']} value={stavka.proizvod.osnovnaCena} onChange={promeniOsnovnuCenuProizvodaHandler} />
+            <input className={styles.pdv} size={2} value={stavka.proizvod.pdv} onChange={promeniPdvProizvodaHandler} />
+            </div>
+            <div className={styles.dugmad}>
             <button onClick={sacuvajStavkuHandler}>Sacuvaj stavku</button>
             <button onClick={odustaniOdUnosaHandler}>Odustani</button>
-        </>
+            </div>
+        </Modal>
     )
 }
 

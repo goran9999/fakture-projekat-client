@@ -1,0 +1,26 @@
+.zaglavlje > th {
+    padding: 30px;
+    font-size: 20px;
+    text-align: center;
+}
+
+.stavka-forma > input {
+    margin-right: 20px;
+}
+.stavka-forma > select {
+    margin-right: 38px;
+}
+.osnovna-cena {
+    margin-left: 3rem;
+    
+}
+.pdv{
+    margin-left: 2.5rem;
+}
+.dugmad{
+    float: right;
+    margin-top: 30px;
+}
+.dugmad > button {
+    margin-right: 10px;
+}
