@@ -1,12 +1,58 @@
 .table {
-    background-color: lightgrey;
+    margin-top: 1rem;
+    border-collapse: collapse;
 }
 
-.table > thead > tr > th {
-    padding: 30px;
+.table > tr:nth-child(even) {
+    background-color: #F7F6F2;
 }
-
-.table > tbody > tr > td {
-    padding: 30px;
+  
+.th, .td {
+    padding: 1rem 2rem;
     text-align: center;
+    font-size: 14px;
+}
+
+.th {  
+    background-color: #171717;
+    color: #DEDEDE;
+    font-weight: normal;
+}
+
+.btn-detalji {
+    padding: 0.7rem;
+    background-color: transparent;
+    border: 1px solid #DEDEDE;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background-color 150ms ease-in-out;
+}
+
+.btn-detalji:hover {
+    background-color: #DEDEDE;
+}
+
+.status {
+    padding: 0.7rem;
+    color: #DEDEDE;
+    border-radius: 5px;
+    font-size: 12px;
+}
+
+.status-poslata {
+    background-color: #621295;
+    
+}
+
+.status-placena {
+    background-color: #4AA96C;
+}
+
+.status-kasni {
+    background-color: #EB4559;
+}
+
+.status-stornirana {
+    background-color: #FFA41B;
 }

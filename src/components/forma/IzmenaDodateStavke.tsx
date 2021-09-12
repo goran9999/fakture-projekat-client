@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import StavkaFakture from '../../models/stavkaFakture'
 import { TipProizvoda } from '../../models/proizvod'
 
+import styles from './NovaFakturaForma.module.css'
+
 interface Props {
     stavka: StavkaFakture
     onSacuvajIzmene: (izmenjenaStavka: StavkaFakture) => void,
@@ -70,19 +72,48 @@ const IzmenaDodateStavke = (props: Props) => {
     }
 
     return (
-        <>
-            <input value={sifra} onChange={promeniSifruHandler} />
-            <input value={naziv} onChange={promeniNazivHandler} />
-            <select value={tip} onChange={promeniTipHandler}>
-                <option value={TipProizvoda.PROIZVOD}>Proizvod</option>
-                <option value={TipProizvoda.USLUGA}>Usluga</option>
-            </select>
-            <input value={kolicina} onChange={promeniKolicinuHandler} />
-            <input value={osnovnaCena} onChange={promeniOsnovnuCenuHandler} />
-            <input value={pdv} onChange={promeniPdvHandler} />
-            <button onClick={sacuvajIzmeneHandler}>Sacuvaj izmene</button>
-            <button onClick={odustaniOdIzmeneHandler}>Odustani</button>
-        </>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)' }}>
+            <div className={styles['form-element']}>
+                <label htmlFor="">Sifra</label>
+                <input value={sifra} onChange={promeniSifruHandler} />
+            </div>
+
+            <div className={styles['form-element']}>
+                <label htmlFor="">Naziv</label>
+                <input value={naziv} onChange={promeniNazivHandler} />
+            </div>
+
+            <div className={styles['form-element']}>
+                <label htmlFor="">Tip</label>
+                <select value={tip} onChange={promeniTipHandler}>
+                    <option value={TipProizvoda.PROIZVOD}>Proizvod</option>
+                    <option value={TipProizvoda.USLUGA}>Usluga</option>
+                </select>
+            </div>
+
+            <div className={styles['form-element']}>
+                <label htmlFor="">Kolicina</label>
+                <input value={kolicina} onChange={promeniKolicinuHandler} />
+            </div>
+
+
+            <div className={styles['form-element']}>
+                <label htmlFor="">Osnovna cena</label>
+                <input value={osnovnaCena} onChange={promeniOsnovnuCenuHandler} />
+            </div>
+
+            <div className={styles['form-element']}>
+                <label htmlFor="">PDV</label>
+                <input value={pdv} onChange={promeniPdvHandler} />
+            </div>
+
+
+            <div>
+                <button className={styles['btn-sacuvaj-stavku']} onClick={sacuvajIzmeneHandler}>Sacuvaj izmene</button>
+                <button className={styles['btn-odbaci-stavku']} onClick={odustaniOdIzmeneHandler}>Odustani</button>
+            </div>
+
+        </div>
     )
 }
 

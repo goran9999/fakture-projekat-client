@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import AdresaModel, { defaultAdresa } from '../../models/adresa'
 
+import styles from './NovaFakturaForma.module.css'
+
 
 interface Props {
     onChange: (izmenjenaAdresa: AdresaModel) => void
@@ -22,22 +24,22 @@ const Adresa = (props: Props) => {
 
     return (
         <>
-            <div>
+            <div className={styles['form-element']}>
                 <label htmlFor='postBroj'>Postanski broj</label>
                 <input value={adresa.postBroj} onChange={promeniAdresuHandler} id='postBroj' name='postBroj' />
             </div>
 
-            <div>
+            <div className={styles['form-element']}>
                 <label htmlFor='grad'>Grad</label>
                 <input value={adresa.grad} onChange={promeniAdresuHandler} id='grad' name='grad' />
             </div>
 
-            <div>
+            <div className={styles['form-element']}>
                 <label htmlFor='ulica'>Ulica</label>
                 <input value={adresa.ulica} onChange={promeniAdresuHandler} id='ulica' name='ulica' />
             </div>
 
-            <div>
+            <div className={styles['form-element']}>
                 <label htmlFor='brUlice'>Broj ulice</label>
                 <input value={adresa.brUlice} onChange={promeniAdresuHandler} id='brUlice' name='brUlice' />
             </div>

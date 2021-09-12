@@ -4,11 +4,7 @@ import Faktura from '../models/faktura'
 
 import styles from './HomePage.module.css'
 
-interface Props {
-
-}
-
-const HomePage = (props: Props) => {
+const HomePage = () => {
 
     const [fakture, setFakture] = useState<Faktura[]>([]);
 

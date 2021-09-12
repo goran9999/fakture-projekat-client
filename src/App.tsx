@@ -8,14 +8,12 @@ import './App.css'
 
 function App() {
   return (
-    <>
-      <Switch>
-        <Route path='/dodaj-fakturu'><NovaFakturaPage /></Route>
-        <Route path='/fakture/:brojFakture'><FakturaDetaljiPage /></Route>
-        <Route path='/' exact><HomePage /></Route>
-        <Route path='*'><NotFoundPage /></Route>
-      </Switch>
-    </>
+    <Switch>
+      <Route path='/dodaj-fakturu'><NovaFakturaPage /></Route>
+      <Route path='/fakture/:brojFakture'><FakturaDetaljiPage /></Route>
+      <Route path='/' exact><HomePage /></Route>
+      <Route path='*'><NotFoundPage /></Route>
+    </Switch>
   );
 }
 

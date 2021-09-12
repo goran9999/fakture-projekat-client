@@ -27,11 +27,13 @@ const ListaFaktura = (props: Props) => {
         <table className={styles.table}>
             <thead>
                 <tr>
-                    <th>Broj</th>
-                    <th>Izdavac</th>
-                    <th>Kupac</th>
-                    <th>Iznos</th>
-                    <th>Status</th>
+                    <th className={styles.th}>Broj</th>
+                    <th className={styles.th}>Izdavac</th>
+                    <th className={styles.th}>Kupac</th>
+                    <th className={styles.th}>Datum izdavanja</th>
+                    <th className={styles.th}>Iznos</th>
+                    <th className={styles.th}>Status</th>
+                    <th className={styles.th}></th>
                 </tr>
             </thead>
             <tbody>
@@ -41,6 +43,7 @@ const ListaFaktura = (props: Props) => {
                         broj={f.broj}
                         imeIzdavaca={f.izdavac.naziv}
                         imeKupca={f.kupac.naziv}
+                        datumIzdavanja={f.datumIzdavanja}
                         ukupanIznos={izracunajUkupanIznos(f.stavke)}
                         status={f.status}
                     />

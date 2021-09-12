@@ -1,11 +1,7 @@
 import React from 'react'
 import { useParams } from 'react-router'
 
-interface Props {
-
-}
-
-const FakturaDetaljiPage = (props: Props) => {
+const FakturaDetaljiPage = () => {
 
     const { brojFakture } = useParams<{ brojFakture: string }>();
 

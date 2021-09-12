@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react"
+import { useHistory } from "react-router"
 import AdresaModel, { defaultAdresa } from "../../models/adresa"
 import Faktura, { StatusFakture } from "../../models/faktura"
 import StavkaFakture, { defaultStavkaFakture } from "../../models/stavkaFakture"
@@ -11,7 +12,7 @@ import Komitent, { defaultKomitent } from "../../models/komitent"
 import styles from './NovaFakturaForma.module.css'
 import Modal from "../../UI/Modal"
 import IzmenaDodateStavke from "./IzmenaDodateStavke"
-import { useHistory } from "react-router"
+
 
 const NovaFakturaForma = () => {
 
@@ -25,7 +26,6 @@ const NovaFakturaForma = () => {
     const [kupac, setKupac] = useState(defaultKomitent)
 
     const [valutaPlacanja, setValutaPlacanja] = useState(Valuta.DINAR)
-    const [statusFakture, setStatusFakture] = useState(StatusFakture.POSLATA)
     const [mestoIzdavanja, setMestoIzdavanja] = useState(defaultAdresa)
 
     const [stavkeFakture, setStavkeFakture] = useState<StavkaFakture[]>([])
@@ -54,7 +54,7 @@ const NovaFakturaForma = () => {
             valutaPlacanja: valutaPlacanja,
             datumIzdavanja: new Date(datumIzdavanjaRef.current!.value),
             rokPlacanja: new Date(rokPlacanjaRef.current!.value),
-            status: statusFakture,
+            status: StatusFakture.PRIPREMA,
             stavke: stavkeFakture
         }
 
@@ -125,10 +125,6 @@ const NovaFakturaForma = () => {
         setValutaPlacanja(e.target.value as Valuta)
     }
 
-    const promeniStatusFaktureHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setStatusFakture(e.target.value as StatusFakture)
-    }
-
     const promeniDatumIzdavanjaHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         datumIzdavanjaRef.current!.value = e.target.value
     }
@@ -177,86 +173,122 @@ const NovaFakturaForma = () => {
     return (
         <form className={styles.forma} onSubmit={sacuvajFakturuHandler}>
 
-            <div className={styles['komitenti-wrapper']}>
-                <div>
-                    <h1>Izdavac</h1>
-                    <div className={styles['izdavac-wrapper']}>
-                        <div>
-                            <label htmlFor='pibIzdavaca'>PIB</label>
-                            <input value={izdavac.pib} onChange={promeniIzdavacaHandler} id='pibIzdavaca' name='pib' />
-                        </div>
-                        <div>
-                            <label htmlFor='maticniBrojIzdavaca'>Maticni broj</label>
-                            <input value={izdavac.maticniBroj} onChange={promeniIzdavacaHandler} id='maticniBrojIzdavaca' name='maticniBroj' />
-                        </div>
-                        <div>
-                            <label htmlFor='nazivIzdavaca'>Naziv</label>
-                            <input value={izdavac.naziv} onChange={promeniIzdavacaHandler} id='nazivIzdavaca' name='naziv' />
-                        </div>
+            <h2>Izdavac</h2>
+            <div className={styles['izdavac-wrapper']}>
 
-                        <div>
-                            <label htmlFor='telefonIzdavaca'>Telefon</label>
-                            <input value={izdavac.telefon} onChange={promeniIzdavacaHandler} id='telefonIzdavaca' name='telefon' />
-                        </div>
-
-                        <Adresa onChange={promeniAdresuIzdavacaHandler} />
-
-                    </div>
-
+                <div className={styles['form-element']}>
+                    <label htmlFor='maticniBrojIzdavaca'>Maticni broj *</label>
+                    <input value={izdavac.maticniBroj} onChange={promeniIzdavacaHandler} id='maticniBrojIzdavaca' name='maticniBroj' />
+                </div>
+                <div className={styles['form-element']}>
+                    <label htmlFor='pibIzdavaca'>PIB *</label>
+                    <input value={izdavac.pib} onChange={promeniIzdavacaHandler} id='pibIzdavaca' name='pib' />
+                </div>
+                <div className={styles['form-element']}>
+                    <label htmlFor='nazivIzdavaca'>Naziv *</label>
+                    <input value={izdavac.naziv} onChange={promeniIzdavacaHandler} id='nazivIzdavaca' name='naziv' />
                 </div>
 
-                <div>
-                    <h1>Kupac</h1>
-                    <div className={styles['kupac-wrapper']}>
-                        <div className={styles.radio}>
-                            <label htmlFor='pravno'>Pravno lice</label>
-                            <input type='radio' id='pravno' checked={pravnoLice} onChange={() => setPravnoLice(true)} />
-                            <label htmlFor='fizicko'>Fizicko lice</label>
-                            <input type='radio' id='fizicko' checked={!pravnoLice} onChange={() => setPravnoLice(false)} />
-                        </div>
-
-
-                        <div style={{ visibility: pravnoLice ? 'visible' : 'hidden' }}>
-                            <label htmlFor='pibKupca'>PIB</label>
-                            <input value={kupac.pib} onChange={promeniKupcaHandler} id='pibKupca' name='pib' />
-                        </div>
-
-                        <div>
-                            <label htmlFor='maticniBrojKupca'>Maticni broj</label>
-                            <input value={kupac.maticniBroj} onChange={promeniKupcaHandler} id='maticniBrojKupca' name='maticniBroj' />
-                        </div>
-
-                        <div>
-                            <label htmlFor='nazivKupca'>Naziv</label>
-                            <input value={kupac.naziv} onChange={promeniKupcaHandler} id='nazivKupca' name='naziv' />
-                        </div>
-
-                        <div>
-                            <label htmlFor='telefonKupca'>Telefon</label>
-                            <input value={kupac.telefon} onChange={promeniKupcaHandler} id='telefonKupca' name='telefon' />
-                        </div>
-
-                        <Adresa onChange={promeniAdresuKupcaHandler} />
-                    </div>
+                <div className={styles['form-element']}>
+                    <label htmlFor='telefonIzdavaca'>Telefon *</label>
+                    <input value={izdavac.telefon} onChange={promeniIzdavacaHandler} id='telefonIzdavaca' name='telefon' />
                 </div>
+
+                <Adresa onChange={promeniAdresuIzdavacaHandler} />
+
             </div>
 
 
+            <h2>Opste informacije</h2>
+            <div className={styles['info-wrapper']}>
+
+                <div className={styles['form-element']}>
+                    <label htmlFor={brojFakture}>Broj fakture *</label>
+                    <input id='brojFakture' value={brojFakture} onChange={promeniBrojFaktureHandler} />
+                </div>
+
+                <div className={styles['form-element']}>
+                    <label htmlFor='valutaPlacanja' style={{ display: 'block' }}>Valuta *</label>
+                    <select value={valutaPlacanja} onChange={promeniValutuPlacanjaHandler} id='valutaPlacanja' name='valutaPlacanja'>
+                        <option value={Valuta.DINAR}>RSD</option>
+                        <option value={Valuta.EVRO}>EUR</option>
+                        <option value={Valuta.DOLAR}>USD</option>
+                    </select>
+                </div>
+
+                <div className={styles['form-element']}>
+                    <label htmlFor='datumIzdavanja'>Datum izdavanja</label>
+                    <input type='date' ref={datumIzdavanjaRef} onChange={promeniDatumIzdavanjaHandler} id='datumIzdavanja' />
+                </div>
+
+                <div className={styles['form-element']}>
+                    <label htmlFor='rokPlacanja'>Rok placanja</label>
+                    <input type='date' ref={rokPlacanjaRef} onChange={promeniRokPlacanjaHandler} />
+                </div>
+
+            </div>
+
+            <h2>Mesto izdavanja</h2>
+            <div className={styles['mesto-izdavanja-wrapper']}>
+                <Adresa onChange={promeniMestoIzdavanjaHandler} />
+            </div>
+
+
+            <h1>Kupac</h1>
+            <div className={styles['kupac-wrapper']}>
+
+                <div>
+                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '5px' }}>
+                        <label htmlFor='pravno' style={{ marginRight: '10px' }}>Pravno lice</label>
+                        <input type='radio' id='pravno' checked={pravnoLice} onChange={() => setPravnoLice(true)} />
+                    </div>
+
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <label htmlFor='fizicko' style={{ marginRight: '10px' }}>Fizicko lice</label>
+                        <input type='radio' id='fizicko' checked={!pravnoLice} onChange={() => setPravnoLice(false)} />
+                    </div>
+
+                </div>
+
+                <div className={styles['form-element']}>
+                    <label htmlFor='maticniBrojKupca'>Maticni broj</label>
+                    <input value={kupac.maticniBroj} onChange={promeniKupcaHandler} id='maticniBrojKupca' name='maticniBroj' />
+                </div>
+
+                <div className={styles['form-element']}>
+                    <label htmlFor='pibKupca' style={{ color: !pravnoLice ? '#DEDEDE' : '' }}>PIB</label>
+                    <input disabled={!pravnoLice} value={kupac.pib} onChange={promeniKupcaHandler} id='pibKupca' name='pib' />
+                </div>
+
+                <div className={styles['form-element']}>
+                    <label htmlFor='nazivKupca'>Naziv</label>
+                    <input value={kupac.naziv} onChange={promeniKupcaHandler} id='nazivKupca' name='naziv' />
+                </div>
+
+                <div className={styles['form-element']}>
+                    <label htmlFor='telefonKupca'>Telefon</label>
+                    <input value={kupac.telefon} onChange={promeniKupcaHandler} id='telefonKupca' name='telefon' />
+                </div>
+
+                <Adresa onChange={promeniAdresuKupcaHandler} />
+            </div>
+
 
             <div>
-
-                <h1>Unos stavki</h1>
-                <table className={styles.table}>
+                <h2>Stavke fakture</h2>
+                <table className={styles['table']}>
                     <thead>
                         <tr>
-                            <th>Sifra</th>
-                            <th>Naziv</th>
-                            <th>Tip</th>
-                            <th>Kolicina</th>
-                            <th>Osnovna cena</th>
-                            <th>PDV</th>
-                            <th>Iznos PDV</th>
-                            <th>Ukupna vrednost</th>
+                            <th className={styles.th}>Sifra</th>
+                            <th className={styles.th}>Naziv</th>
+                            <th className={styles.th}>Tip</th>
+                            <th className={styles.th}>Kolicina</th>
+                            <th className={styles.th}>Osnovna cena</th>
+                            <th className={styles.th}>PDV</th>
+                            <th className={styles.th}>Iznos PDV</th>
+                            <th className={styles.th}>Ukupna vrednost</th>
+                            <th className={styles.th}></th>
+                            <th className={styles.th}></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -270,65 +302,33 @@ const NovaFakturaForma = () => {
                         )}
                     </tbody>
                 </table>
-
-                {prikaziModalZaIzmenuStavke &&
-                    <Modal onZatvori={odustaniOdIzmeneStavkeHandler}>
-                        <IzmenaDodateStavke
-                            stavka={stavkaZaIzmenu}
-                            onOdustaniOdIzmene={odustaniOdIzmeneStavkeHandler}
-                            onSacuvajIzmene={sacuvajIzmeneStavkeHandler}
-                        />
-                    </Modal>
-                }
-
-                {prikaziModalZaUnosStavke ?
-                    <Modal onZatvori={() => setPrikaziModalZaUnosStavke(false)}>
-                        <DodavanjeStavke onSacuvajStavku={dodajStavku} onOdustaniOdUnosa={() => setPrikaziModalZaUnosStavke(false)} />
-                    </Modal>
-                    :
-                    <button onClick={() => setPrikaziModalZaUnosStavke(true)}>Dodaj novu stavku</button>
-                }
-
             </div>
 
 
+            {prikaziModalZaIzmenuStavke &&
+                <Modal onZatvori={odustaniOdIzmeneStavkeHandler}>
+                    <IzmenaDodateStavke
+                        stavka={stavkaZaIzmenu}
+                        onOdustaniOdIzmene={odustaniOdIzmeneStavkeHandler}
+                        onSacuvajIzmene={sacuvajIzmeneStavkeHandler}
+                    />
+                </Modal>
+            }
 
-            <div>
-
-                <h1>Dodatne informacije</h1>
-
-                <div className={styles['dodatne-info-wrapper']}>
-                    <label htmlFor={brojFakture}>Broj fakture</label>
-                    <input id='brojFakture' value={brojFakture} onChange={promeniBrojFaktureHandler} />
-
-                    <h3>Mesto izdavanja</h3>
-                    <Adresa onChange={promeniMestoIzdavanjaHandler} />
-
-                    <label htmlFor='datumIzdavanja'>Datum izdavanja</label>
-                    <input type='date' ref={datumIzdavanjaRef} onChange={promeniDatumIzdavanjaHandler} id='datumIzdavanja' />
-                    <label htmlFor='rokPlacanja'>Rok placanja</label>
-                    <input type='date' ref={rokPlacanjaRef} onChange={promeniRokPlacanjaHandler} />
-
-                    <label htmlFor='valutaPlacanja'>Valuta placanja</label>
-                    <select value={valutaPlacanja} onChange={promeniValutuPlacanjaHandler} id='valutaPlacanja' name='valutaPlacanja'>
-                        <option value={Valuta.DINAR}>RSD</option>
-                        <option value={Valuta.EVRO}>EUR</option>
-                        <option value={Valuta.DOLAR}>USD</option>
-                    </select>
-
-                    <label htmlFor='statusFakture'>Status fakture</label>
-                    <select value={statusFakture} onChange={promeniStatusFaktureHandler} id='statusFakture' name='statusFakture'>
-                        <option value={StatusFakture.PLACENA}>Placena</option>
-                        <option value={StatusFakture.POSLATA}>Poslata</option>
-                        <option value={StatusFakture.PRIPREMA}>Priprema</option>
-                    </select>
-
+            {prikaziModalZaUnosStavke ?
+                <Modal onZatvori={() => setPrikaziModalZaUnosStavke(false)}>
+                    <DodavanjeStavke onSacuvajStavku={dodajStavku} onOdustaniOdUnosa={() => setPrikaziModalZaUnosStavke(false)} />
+                </Modal>
+                :
+                <div>
+                    <button type='button' className={styles['btn-dodaj']} onClick={() => setPrikaziModalZaUnosStavke(true)}>Dodaj stavku</button>
                 </div>
+            }
+
+            <div className={styles['potvrdi-formu-wrapper']}>
+                <button>Sacuvaj fakturu</button>
             </div>
 
-
-
-            <button>Sacuvaj fakturu</button>
         </form>
     )
 }
