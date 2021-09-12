@@ -56,3 +56,7 @@
 .status-stornirana {
     background-color: #FFA41B;
 }
+
+.status-priprema {
+    background-color: yellow;
+}

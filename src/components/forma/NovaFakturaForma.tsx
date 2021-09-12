@@ -298,6 +298,7 @@ const NovaFakturaForma = () => {
                                 stavka={s}
                                 onUkloniStavku={ukloniStavku}
                                 onIzmeniStavku={izmeniStavku}
+                                omoguciIzmenu={true}
                             />
                         )}
                     </tbody>

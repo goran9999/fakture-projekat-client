@@ -1,0 +1,44 @@
+.faktura{
+    border: 1px solid black;
+    width: 60%;
+    margin-left: 20%;
+    height: 95vh;
+    
+}
+.izdavac{
+    margin:30px
+}
+.izdavac > h1{
+    margin-top: 10px;
+}
+.izdavac > p {
+    margin:5px;
+}
+.grad {
+    display: inline;
+}
+.kupac > p {
+    margin:5px;
+}
+.kupac{
+    margin:0px 30px 50px 30px;
+}
+.kupac > h3{
+    margin-top: 10px;
+}
+.tabela {
+    margin-left: 15%;
+}
+.komitenti{
+    display: flex;
+}
+.detalji{
+  align-self: stretch;
+  margin-top: 70px;
+  margin-left: 40%;
+}
+.ukupno{
+    float:right;
+    margin-right: 70px;
+    margin-top: 7rem;
+}

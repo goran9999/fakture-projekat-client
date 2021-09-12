@@ -7,6 +7,7 @@ interface Props {
     stavka: StavkaFakture
     onUkloniStavku: (sifraProizvoda: string) => void,
     onIzmeniStavku: (sifraProizvoda: string) => void
+    omoguciIzmenu: boolean
 }
 
 const DodataStavkaItem = (props: Props) => {
@@ -32,12 +33,16 @@ const DodataStavkaItem = (props: Props) => {
             <td className={styles.td}>{pdvProizvoda}</td>
             <td className={styles.td}>{osnovnaCenaProizvoda * pdvProizvoda / 100}</td>
             <td className={styles.td}>{(osnovnaCenaProizvoda + (osnovnaCenaProizvoda * pdvProizvoda) / 100) * kolicina}</td>
-            <td className={styles.td}>
-                <button className={styles['btn-izmeni']} type='button' onClick={izmeniStavkuHandler}>Izmeni</button>
-            </td>
-            <td className={styles.td}>
-                <button className={styles['btn-ukloni']} type='button' onClick={ukloniStavkuHandler}>Ukloni</button>
-            </td>
+            {props.omoguciIzmenu &&
+                <>
+                    <td className={styles.td}>
+                        <button className={styles['btn-izmeni']} type='button' onClick={izmeniStavkuHandler}>Izmeni</button>
+                    </td>
+                    <td className={styles.td}>
+                        <button className={styles['btn-ukloni']} type='button' onClick={ukloniStavkuHandler}>Ukloni</button>
+                    </td>
+                </>
+            }
         </tr>
     )
 }

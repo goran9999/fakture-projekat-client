@@ -10,6 +10,7 @@ export function vratiCssKlasuStatusaFakture(status: StatusFakture): string {
         case StatusFakture.POSLATA: return 'status-poslata';
         case StatusFakture.KASNI: return 'status-kasni';
         case StatusFakture.STORNIRANA: return 'status-stornirana';
+        case StatusFakture.PRIPREMA: return 'status-priprema'
         default: throw Error('Prosledjen je los status')
     }
 }
