@@ -1,13 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import StavkaFakture from '../../models/stavkaFakture'
-import Proizvod, { TipProizvoda } from '../../models/proizvod'
+import { TipProizvoda } from '../../models/proizvod'
 
 interface Props {
-    onSacuvajStavku: (stavka: StavkaFakture) => void
-    onOdustaniOdUnosa: () => void
+    stavka: StavkaFakture
+    onSacuvajIzmene: (izmenjenaStavka: StavkaFakture) => void,
+    onOdustaniOdIzmene: () => void
 }
 
-const DodavanjeStavke = (props: Props) => {
+const IzmenaDodateStavke = (props: Props) => {
 
     const [sifra, setSifra] = useState('');
     const [naziv, setNaziv] = useState('');
@@ -16,36 +17,28 @@ const DodavanjeStavke = (props: Props) => {
     const [pdv, setPdv] = useState(0);
     const [kolicina, setKolicina] = useState(1);
 
-    const sacuvajStavkuHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
-        const proizvod: Proizvod = {
-            sifra: sifra,
-            naziv: naziv,
-            tip: tip,
-            osnovnaCena: osnovnaCena,
-            pdv: pdv
-        };
+    useEffect(() => {
+        setSifra(props.stavka.proizvod.sifra)
+        setNaziv(props.stavka.proizvod.naziv)
+        setTip(props.stavka.proizvod.tip)
+        setOsnovnaCena(props.stavka.proizvod.osnovnaCena)
+        setPdv(props.stavka.proizvod.pdv)
+        setKolicina(props.stavka.kolicina)
+    }, [props])
 
-        const stavka: StavkaFakture = {
-            proizvod: proizvod,
+    const sacuvajIzmeneHandler = () => {
+
+        const izmenjenaStavka: StavkaFakture = {
+            proizvod: {
+                sifra: sifra,
+                naziv: naziv,
+                tip: tip,
+                osnovnaCena: osnovnaCena,
+                pdv: pdv,
+            },
             kolicina: kolicina
         }
-
-        props.onSacuvajStavku(stavka)
-        resetujStavku()
-    }
-
-    const odustaniOdUnosaHandler = () => {
-        resetujStavku()
-        props.onOdustaniOdUnosa()
-    }
-
-    const resetujStavku = () => {
-        setSifra('');
-        setNaziv('');
-        setKolicina(1);
-        setTip(TipProizvoda.PROIZVOD)
-        setOsnovnaCena(0);
-        setPdv(0);
+        props.onSacuvajIzmene(izmenjenaStavka);
     }
 
     const promeniSifruHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -72,6 +65,10 @@ const DodavanjeStavke = (props: Props) => {
         setKolicina(+e.target.value)
     }
 
+    const odustaniOdIzmeneHandler = () => {
+        props.onOdustaniOdIzmene();
+    }
+
     return (
         <>
             <input value={sifra} onChange={promeniSifruHandler} />
@@ -83,10 +80,10 @@ const DodavanjeStavke = (props: Props) => {
             <input value={kolicina} onChange={promeniKolicinuHandler} />
             <input value={osnovnaCena} onChange={promeniOsnovnuCenuHandler} />
             <input value={pdv} onChange={promeniPdvHandler} />
-            <button onClick={sacuvajStavkuHandler}>Sacuvaj stavku</button>
-            <button onClick={odustaniOdUnosaHandler}>Odustani</button>
+            <button onClick={sacuvajIzmeneHandler}>Sacuvaj izmene</button>
+            <button onClick={odustaniOdIzmeneHandler}>Odustani</button>
         </>
     )
 }
 
-export default DodavanjeStavke
+export default IzmenaDodateStavke

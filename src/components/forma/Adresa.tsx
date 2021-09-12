@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import AdresaModel from '../../models/adresa'
+import AdresaModel, { defaultAdresa } from '../../models/adresa'
 
 
 interface Props {
@@ -8,12 +8,7 @@ interface Props {
 
 const Adresa = (props: Props) => {
 
-    const [adresa, setAdresa] = useState<AdresaModel>({
-        postBroj: 0,
-        grad: '',
-        ulica: '',
-        brUlice: ''
-    })
+    const [adresa, setAdresa] = useState(defaultAdresa)
 
     const promeniAdresuHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         const nazivPolja = e.target.name;

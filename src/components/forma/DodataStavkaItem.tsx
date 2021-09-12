@@ -1,41 +1,23 @@
 import React from 'react';
-import { TipProizvoda } from '../../models/proizvod'
 import StavkaFakture from '../../models/stavkaFakture';
 
 interface Props {
-    sifraProizvoda: string
-    nazivProizvoda: string
-    tipProizvoda: TipProizvoda
-    osnovnaCenaProizvoda: number
-    pdvProizvoda: number
-    kolicina: number
+    stavka: StavkaFakture
     onUkloniStavku: (sifraProizvoda: string) => void,
-    onIzmeniStavku: (stavka: StavkaFakture) => void,
+    onIzmeniStavku: (sifraProizvoda: string) => void
 }
 
 const DodataStavkaItem = (props: Props) => {
 
-    const { sifraProizvoda, nazivProizvoda, tipProizvoda, kolicina, osnovnaCenaProizvoda, pdvProizvoda } = props;
+    const { sifra: sifraProizvoda, naziv: nazivProizvoda, tip: tipProizvoda, osnovnaCena: osnovnaCenaProizvoda, pdv: pdvProizvoda } = props.stavka.proizvod;
+    const { kolicina } = props.stavka
 
     const ukloniStavkuHandler = () => {
         props.onUkloniStavku(sifraProizvoda);
     }
 
     const izmeniStavkuHandler = () => {
-
-        const stavka: StavkaFakture = {
-            proizvod: {
-                sifra: sifraProizvoda,
-                naziv: nazivProizvoda,
-                tip: tipProizvoda,
-                osnovnaCena: osnovnaCenaProizvoda,
-                pdv: pdvProizvoda
-            },
-            kolicina: kolicina
-        }
-
-        props.onIzmeniStavku(stavka);
-
+        props.onIzmeniStavku(sifraProizvoda)
     }
 
     return (

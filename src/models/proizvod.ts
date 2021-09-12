@@ -10,3 +10,11 @@ export enum TipProizvoda {
     PROIZVOD = "proizvod",
     USLUGA = "usluga"
 }
+
+export const defaultProizvod: Proizvod = {
+    sifra: '',
+    naziv: '',
+    osnovnaCena: 0,
+    pdv: 0,
+    tip: TipProizvoda.PROIZVOD
+}

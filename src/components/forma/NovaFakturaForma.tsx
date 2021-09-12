@@ -1,68 +1,41 @@
 import React, { useRef, useState } from "react"
-import AdresaModel from "../../models/adresa"
+import AdresaModel, { defaultAdresa } from "../../models/adresa"
 import Faktura, { StatusFakture } from "../../models/faktura"
-import StavkaFakture from "../../models/stavkaFakture"
+import StavkaFakture, { defaultStavkaFakture } from "../../models/stavkaFakture"
 import Valuta from "../../models/valuta"
 import Adresa from "./Adresa"
 import DodataStavkaItem from "./DodataStavkaItem"
-import { TipProizvoda } from "../../models/proizvod"
 import DodavanjeStavke from "./DodavanjeStavke"
-import Komitent from "../../models/komitent"
+import Komitent, { defaultKomitent } from "../../models/komitent"
 
 import styles from './NovaFakturaForma.module.css'
-
+import Modal from "../../UI/Modal"
+import IzmenaDodateStavke from "./IzmenaDodateStavke"
+import { useHistory } from "react-router"
 
 const NovaFakturaForma = () => {
 
+    const history = useHistory()
+
     const [brojFakture, setBrojFakture] = useState('');
-    const [stavka, setStavka] = useState({
-        proizvod: {
-            sifra: '',
-            naziv: '',
-            osnovnaCena: 0,
-            pdv: 0,
-            tip: TipProizvoda.PROIZVOD
-        },
-        kolicina: 0
-    })
-    const [izdavac, setIzdavac] = useState<Komitent>({
-        pib: '',
-        naziv: '',
-        maticniBroj: '',
-        adresa: {
-            postBroj: 0,
-            grad: '',
-            ulica: '',
-            brUlice: ''
-        },
-        telefon: ''
-    })
+
+    const [izdavac, setIzdavac] = useState(defaultKomitent)
 
     const [pravnoLice, setPravnoLice] = useState(true);
-    const [kupac, setKupac] = useState<Komitent>({
-        pib: '',
-        naziv: '',
-        maticniBroj: '',
-        adresa: {
-            postBroj: 0,
-            grad: '',
-            ulica: '',
-            brUlice: ''
-        },
-        telefon: ''
-    })
+    const [kupac, setKupac] = useState(defaultKomitent)
 
     const [valutaPlacanja, setValutaPlacanja] = useState(Valuta.DINAR)
     const [statusFakture, setStatusFakture] = useState(StatusFakture.POSLATA)
-    const [mestoIzdavanja, setMestoIzdavanja] = useState<AdresaModel>({
-        postBroj: 0,
-        grad: '',
-        ulica: '',
-        brUlice: ''
-    })
+    const [mestoIzdavanja, setMestoIzdavanja] = useState(defaultAdresa)
 
     const [stavkeFakture, setStavkeFakture] = useState<StavkaFakture[]>([])
-    const [prikaziUnosNoveStavke, setPrikaziUnosNoveStavke] = useState(false);
+    const [prikaziModalZaUnosStavke, setPrikaziModalZaUnosStavke] = useState(false)
+    const [prikaziModalZaIzmenuStavke, setPrikaziModalZaIzmenuStavke] = useState(false)
+
+
+    // po defaultu je stavkaZaIzmenu prva stavka u nizu da se kompajler ne bi bunio, 
+    // ali klikom na izmenu neke stavke ce se promeniti ovo stanje
+    const [stavkaZaIzmenu, setStavkaZaIzmenu] = useState(defaultStavkaFakture);
 
     // refs
     const datumIzdavanjaRef = useRef<HTMLInputElement>(null);
@@ -100,53 +73,10 @@ const NovaFakturaForma = () => {
                 throw new Error('Problem u cuvanju fakture.')
             }
 
-            console.log('Faktura uspesno sacuvana')
-            resetujFormu();
+            history.replace('/')
         } catch (e) {
             console.log(e)
         }
-    }
-
-    const resetujFormu = () => {
-        setBrojFakture('');
-
-        setIzdavac({
-            pib: '',
-            naziv: '',
-            maticniBroj: '',
-            adresa: {
-                postBroj: 0,
-                grad: '',
-                ulica: '',
-                brUlice: ''
-            },
-            telefon: ''
-        })
-
-        setKupac({
-            pib: '',
-            naziv: '',
-            maticniBroj: '',
-            adresa: {
-                postBroj: 0,
-                grad: '',
-                ulica: '',
-                brUlice: ''
-            },
-            telefon: ''
-        })
-
-        setValutaPlacanja(Valuta.DINAR)
-        setStatusFakture(StatusFakture.POSLATA)
-
-        setMestoIzdavanja({
-            postBroj: 0,
-            grad: '',
-            ulica: '',
-            brUlice: ''
-        })
-
-        setStavkeFakture([])
     }
 
     const promeniIzdavacaHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -211,7 +141,7 @@ const NovaFakturaForma = () => {
         setStavkeFakture(prevStavke => {
             return [...prevStavke, stavka]
         })
-        setPrikaziUnosNoveStavke(false)
+        setPrikaziModalZaUnosStavke(false);
     }
 
     const ukloniStavku = (sifraProizvoda: string) => {
@@ -220,26 +150,28 @@ const NovaFakturaForma = () => {
         })
     }
 
-    const izmeniStavku = (stavka: StavkaFakture) => {
-        setStavka(stavka);
-        setStavkeFakture(prevStavke => {
-            return prevStavke.filter(s => s.proizvod.sifra !== stavka.proizvod.sifra);
-        })
-        setPrikaziUnosNoveStavke(true);
+    const izmeniStavku = (sifraProizvoda: string) => {
+        const stavkaZaIzmenu = stavkeFakture.find(s => s.proizvod.sifra === sifraProizvoda);
+        setStavkaZaIzmenu(stavkaZaIzmenu!);
+        setPrikaziModalZaIzmenuStavke(true);
     }
 
-    const dodajStavkuHandler = () => {
-        setStavka({
-            proizvod: {
-                sifra: '',
-                naziv: '',
-                osnovnaCena: 0,
-                pdv: 0,
-                tip: TipProizvoda.PROIZVOD
-            },
-            kolicina: 0
-        })
-        setPrikaziUnosNoveStavke(true);
+    const odustaniOdIzmeneStavkeHandler = () => {
+        setPrikaziModalZaIzmenuStavke(false);
+        setStavkaZaIzmenu(defaultStavkaFakture)
+    }
+
+    const sacuvajIzmeneStavkeHandler = (izmenjenaStavka: StavkaFakture) => {
+        // indeks stavke koju treba promeniti
+        const indeks = stavkeFakture.findIndex(s => s.proizvod.sifra === stavkaZaIzmenu.proizvod.sifra)
+
+        // kopiraj sve prethodne i samo izmeni stavku na tom indeksu
+        const azuriraneStavke = [...stavkeFakture]
+        azuriraneStavke[indeks] = izmenjenaStavka
+
+        setStavkeFakture(azuriraneStavke)
+        setPrikaziModalZaIzmenuStavke(false);
+        setStavkaZaIzmenu(defaultStavkaFakture)
     }
 
     return (
@@ -331,12 +263,7 @@ const NovaFakturaForma = () => {
                         {stavkeFakture.map(s =>
                             <DodataStavkaItem
                                 key={s.proizvod.sifra}
-                                sifraProizvoda={s.proizvod.sifra}
-                                nazivProizvoda={s.proizvod.naziv}
-                                tipProizvoda={s.proizvod.tip}
-                                osnovnaCenaProizvoda={s.proizvod.osnovnaCena}
-                                pdvProizvoda={s.proizvod.pdv}
-                                kolicina={s.kolicina}
+                                stavka={s}
                                 onUkloniStavku={ukloniStavku}
                                 onIzmeniStavku={izmeniStavku}
                             />
@@ -344,8 +271,23 @@ const NovaFakturaForma = () => {
                     </tbody>
                 </table>
 
-                {prikaziUnosNoveStavke && <DodavanjeStavke stavka={stavka} onSacuvajStavku={dodajStavku} onOdustaniOdUnosa={() => setPrikaziUnosNoveStavke(false)} />}
-                {!prikaziUnosNoveStavke && <button onClick={dodajStavkuHandler}>Dodaj novu stavku</button>}
+                {prikaziModalZaIzmenuStavke &&
+                    <Modal onZatvori={odustaniOdIzmeneStavkeHandler}>
+                        <IzmenaDodateStavke
+                            stavka={stavkaZaIzmenu}
+                            onOdustaniOdIzmene={odustaniOdIzmeneStavkeHandler}
+                            onSacuvajIzmene={sacuvajIzmeneStavkeHandler}
+                        />
+                    </Modal>
+                }
+
+                {prikaziModalZaUnosStavke ?
+                    <Modal onZatvori={() => setPrikaziModalZaUnosStavke(false)}>
+                        <DodavanjeStavke onSacuvajStavku={dodajStavku} onOdustaniOdUnosa={() => setPrikaziModalZaUnosStavke(false)} />
+                    </Modal>
+                    :
+                    <button onClick={() => setPrikaziModalZaUnosStavke(true)}>Dodaj novu stavku</button>
+                }
 
             </div>
 
