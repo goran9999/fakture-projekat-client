@@ -25,7 +25,7 @@ const FakturaItem = (props: Props) => {
     }
 
     return (
-        <tr>
+        <tr className={styles.tr}>
             <td className={styles.td}>#{props.broj}</td>
             <td className={styles.td}>{props.imeIzdavaca}</td>
             <td className={styles.td}>{props.imeKupca}</td>

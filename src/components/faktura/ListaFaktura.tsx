@@ -26,17 +26,22 @@ const ListaFaktura = (props: Props) => {
 
     return (
         <>
-
             <table className={styles.table}>
                 <thead>
-                    <tr>
+                    <tr className={styles.tr}>
                         <th className={styles.th}>Broj</th>
                         <th className={styles.th}>Izdavac</th>
                         <th className={styles.th}>Kupac</th>
                         <th className={styles.th}>Datum izdavanja</th>
                         <th className={styles.th}>Iznos</th>
                         <th className={styles.th}>Status</th>
-                        <th className={styles.th}></th>
+                        <th className={styles.th}>
+                            <button
+                                className={styles['btn-filter']}
+                                onClick={props.onOmoguciFiltriranje}
+                            >Filtriraj
+                            </button>
+                        </th>
                         <th className={styles.th}></th>
                     </tr>
                 </thead>

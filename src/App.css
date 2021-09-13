@@ -14,3 +14,12 @@ body {
 label {
     display: block;
 }
+
+li {
+    list-style-type: none;
+}
+
+a {
+    text-decoration: none;
+    color: #FDFAF6;
+}

@@ -1,22 +1,25 @@
 .table {
-    margin-top: 1rem;
     border-collapse: collapse;
+    margin: 3rem 2rem;
 }
 
-.table > tr:nth-child(even) {
-    background-color: #F7F6F2;
+.tr:nth-child(even) {
+    background-color: #EFEFEF;
 }
-  
-.th, .td {
+
+.th {
     padding: 1rem 2rem;
     text-align: center;
     font-size: 14px;
-}
-
-.th {  
     background-color: #171717;
     color: #DEDEDE;
     font-weight: normal;
+}
+
+.td {
+    padding: 1rem 2rem;
+    text-align: center;
+    font-size: 14px;
 }
 
 .btn-detalji {
@@ -31,6 +34,22 @@
 
 .btn-detalji:hover {
     background-color: #DEDEDE;
+}
+
+.btn-filter {
+    padding: 0.7rem;
+    background-color: transparent;
+    color: #DEDEDE;
+    border: 1px solid #DEDEDE;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: transform 300ms ease-in-out, box-shadow 300ms ease-in-out;
+}
+
+.btn-filter:hover {
+    transform: translateY(-2px);
+    box-shadow: 2px 5px #621295;
 }
 
 .status {

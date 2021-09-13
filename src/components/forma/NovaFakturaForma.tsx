@@ -189,7 +189,6 @@ const NovaFakturaForma = () => {
                     <label htmlFor='nazivIzdavaca'>Naziv *</label>
                     <input value={izdavac.naziv} onChange={promeniIzdavacaHandler} id='nazivIzdavaca' name='naziv' />
                 </div>
-
                 <div className={styles['form-element']}>
                     <label htmlFor='telefonIzdavaca'>Telefon *</label>
                     <input value={izdavac.telefon} onChange={promeniIzdavacaHandler} id='telefonIzdavaca' name='telefon' />
