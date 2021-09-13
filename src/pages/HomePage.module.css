@@ -1,6 +1,55 @@
 .main {
-    height: 100vh;
+    height: auto;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+.filter{
+    display: flex;
+    justify-content: center;
+    width: auto;
+    margin-top: 10%;
+}
+.status > input{
+    margin-right:10px ;
+    border:1px solid red;
+}
+.status > label{
+    margin-right: 10px;
+}
+.status{
+    display: flex;
+
+}
+
+.btn-filter {
+    position: fixed;
+    top: 12%;
+    left: 14%;  
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: #171717;
+    color: #DEDEDE;
+    font-size: 15px;
+    border: 1px solid #171717;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-filter:hover {
+    background-color: #252525;
+}
+
+.btn-dodaj-fakturu{
+    float: right;
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: #171717;
+    color: #DEDEDE;
+    font-size: 15px;
+    border: 1px solid #171717;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 14%;
+    margin-top: 40px;
 }

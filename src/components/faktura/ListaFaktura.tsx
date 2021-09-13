@@ -6,7 +6,8 @@ import StavkaFakture from "../../models/stavkaFakture";
 import styles from './ListaFaktura.module.css'
 
 interface Props {
-    fakture: Faktura[]
+    fakture: Faktura[],
+    onOmoguciFiltriranje:()=>void,
 }
 
 const ListaFaktura = (props: Props) => {
@@ -24,6 +25,8 @@ const ListaFaktura = (props: Props) => {
     }
 
     return (
+        <>
+
         <table className={styles.table}>
             <thead>
                 <tr>
@@ -52,6 +55,7 @@ const ListaFaktura = (props: Props) => {
             </tbody>
 
         </table>
+        </>
     )
 
 }

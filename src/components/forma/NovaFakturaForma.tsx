@@ -257,7 +257,7 @@ const NovaFakturaForma = () => {
                 </div>
 
                 <div className={styles['form-element']}>
-                    <label htmlFor='pibKupca' style={{ color: !pravnoLice ? '#DEDEDE' : '' }}>PIB</label>
+                    <label htmlFor='pibKupca' style={{ color: !pravnoLice ? '#DEDEDE' : '' }}>PIB *</label>
                     <input disabled={!pravnoLice} value={kupac.pib} onChange={promeniKupcaHandler} id='pibKupca' name='pib' />
                 </div>
 
