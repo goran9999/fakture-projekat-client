@@ -6,6 +6,7 @@ export default interface Komitent {
     adresa: Adresa
     telefon: string,
     maticniBroj: string,
+    email: string,
     pib?: string
 }
 
@@ -24,5 +25,6 @@ export const defaultKomitent: Komitent = {
         ulica: '',
         brUlice: ''
     },
+    email: '',
     telefon: ''
 }

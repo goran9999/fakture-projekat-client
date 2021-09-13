@@ -1,6 +1,7 @@
-import Faktura from "../../models/faktura";
+import { useState } from "react";
+import Faktura, { StatusFakture } from "../../models/faktura";
 import StavkaFakture from "../../models/stavkaFakture";
-import { formatirajCenu, formatirajDatum } from "../../utils/utils";
+import { formatirajCenu, formatirajDatum, kapitalizujPrvoSlovo } from "../../utils/utils";
 import DodataStavkaItem from "../forma/DodataStavkaItem";
 import styles from './DetaljnaFaktura.module.css'
 
@@ -14,9 +15,13 @@ const DetaljnaFaktura = (props: Props) => {
 
     const ukloniStavku = () => { }
 
+    const [ukupanIznos, setUkupanIznos] = useState(0);
+
     const izracunajUkupanIznos = (stavkeFakture: StavkaFakture[]) => {
         let zbir = 0;
-        stavkeFakture.forEach(stavka => zbir += stavka.proizvod.osnovnaCena + (stavka.proizvod.osnovnaCena * stavka.proizvod.pdv));
+        stavkeFakture.forEach(s => (
+            zbir += s.kolicina * s.proizvod.osnovnaCena + s.kolicina * s.proizvod.osnovnaCena * s.proizvod.pdv / 100
+        ))
 
         return zbir;
 
@@ -26,31 +31,32 @@ const DetaljnaFaktura = (props: Props) => {
         <div className={styles.faktura}>
             <div className={styles.komitenti}>
                 <div className={styles['izdavac']}>
-                    <h3>Broj fakture {props.faktura.broj}</h3>
+                    <div className={styles.zaglavlje}>
+                        <h3>Broj fakture {props.faktura.broj}</h3>
+                    </div>
                     <h1>{props.faktura.izdavac.naziv}</h1>
-                    <p>{props.faktura.izdavac.adresa.ulica}</p>
-                    <p>{props.faktura.izdavac.adresa.grad}</p>
-                    <p>{props.faktura.izdavac.adresa.postBroj}</p>
-                    <p>{props.faktura.izdavac.telefon}</p>
+                    <p><b>Maticni broj:</b> {props.faktura.izdavac.maticniBroj}</p>
+                    <p><b>Adresa:</b> {props.faktura.izdavac.adresa.ulica}, {props.faktura.izdavac.adresa.brUlice}</p>
+                    <p><b>Grad:</b> {props.faktura.izdavac.adresa.grad} {props.faktura.izdavac.adresa.postBroj}</p>
+                    <p><b>Broj telefona:</b> {props.faktura.izdavac.telefon}</p>
 
                 </div>
                 <div className={styles.detalji}>
                     <h2>Detalji</h2>
-                    <h4>Mesto izdavanja</h4>
-                    <p>{props.faktura.mestoIzdavanja.grad}</p>
-                    <h4>Datum izdavanja</h4>
-                    <p>{formatirajDatum(new Date(props.faktura.datumIzdavanja.toString()))}</p>
-                    <h4>Rok placanja</h4>
-                    <p>{formatirajDatum(new Date(props.faktura.rokPlacanja.toString()))}</p>
+                    <p><b>Mesto izdavanja:</b> {props.faktura.mestoIzdavanja.grad}</p>
+                    <p><b>Datum izdavanja:</b> {formatirajDatum(new Date(props.faktura.datumIzdavanja.toString()))} </p>
+                    <p><b>Rok placanja:</b> {formatirajDatum(new Date(props.faktura.rokPlacanja.toString()))}</p>
+                    <p><b>Valuta placanja:</b> {kapitalizujPrvoSlovo(props.faktura.valutaPlacanja)}</p>
                 </div>
             </div>
             <div className={styles.kupac}>
                 <h2>Kupac</h2>
                 <h3>{props.faktura.kupac.naziv}</h3>
-                <p>{props.faktura.kupac.adresa.ulica}</p>
-                <p>{props.faktura.kupac.adresa.grad}</p>
-                <p>{props.faktura.kupac.adresa.postBroj}</p>
-                <p>{props.faktura.kupac.telefon}</p>
+                <p><b>Maticni broj:</b> {props.faktura.kupac.maticniBroj}</p>
+                {props.faktura.kupac.pib ? <p><b>PIB:</b> {props.faktura.kupac.pib}</p> : null}
+                <p><b>Adresa:</b> {props.faktura.kupac.adresa.ulica}, {props.faktura.kupac.adresa.postBroj}</p>
+                <p><b>Grad:</b> {props.faktura.kupac.adresa.grad} {props.faktura.kupac.adresa.postBroj}</p>
+                <p><b>Broj telefona:</b> {props.faktura.kupac.telefon}</p>
             </div>
             <table className={styles.tabela}>
                 <thead>
@@ -58,10 +64,10 @@ const DetaljnaFaktura = (props: Props) => {
                         <th>Sifra</th>
                         <th>Naziv</th>
                         <th>Tip</th>
-                        <th>Kolicina</th>
+                        <th >Kolicina</th>
                         <th>Osnovna cena</th>
-                        <th>PDV %</th>
-                        <th>Iznos PDV</th>
+                        <th>PDV</th>
+                        <th >Iznos PDV</th>
                         <th>Ukupna vrednost</th>
                     </tr>
                 </thead>
@@ -71,17 +77,23 @@ const DetaljnaFaktura = (props: Props) => {
                         <DodataStavkaItem
                             key={s.proizvod.sifra}
                             stavka={s}
-                            valutaPlacanja={props.faktura.valutaPlacanja}
                             omoguciIzmenu={false}
                             onIzmeniStavku={izmeniStavku}
                             onUkloniStavku={ukloniStavku}
+                            valutaPlacanja={props.faktura.valutaPlacanja}
                         />
                     )}
+
                 </tbody>
 
             </table>
 
-            <h2 className={styles.ukupno}>Ukupno: {formatirajCenu(izracunajUkupanIznos(props.faktura.stavke), props.faktura.valutaPlacanja)}</h2>
+            <footer className={styles.footer}>
+                <button className={`${styles['btn-posalji']} ${props.faktura.status === StatusFakture.POSLATA ? styles.hidden : ''}`}>Posalji</button>
+                <div className={styles.ukupno}>
+                    <h2>Ukupno: {formatirajCenu(izracunajUkupanIznos(props.faktura.stavke), props.faktura.valutaPlacanja)}</h2>
+                </div>
+            </footer>
         </div>
     )
 }

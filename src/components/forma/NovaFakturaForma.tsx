@@ -32,7 +32,7 @@ const NovaFakturaForma = () => {
     const [stavkeFakture, setStavkeFakture] = useState<StavkaFakture[]>([])
     const [prikaziModalZaUnosStavke, setPrikaziModalZaUnosStavke] = useState(false)
     const [prikaziModalZaIzmenuStavke, setPrikaziModalZaIzmenuStavke] = useState(false)
-
+    const [prikaziModalZaSlanjeMaila, setPrikaziModalZaSlanjeMaila] = useState(false)
 
     // po defaultu je stavkaZaIzmenu prva stavka u nizu da se kompajler ne bi bunio, 
     // ali klikom na izmenu neke stavke ce se promeniti ovo stanje
@@ -42,11 +42,12 @@ const NovaFakturaForma = () => {
     const datumIzdavanjaRef = useRef<HTMLInputElement>(null);
     const rokPlacanjaRef = useRef<HTMLInputElement>(null);
 
-    const sacuvajFakturuHandler = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    const sacuvajFakturuHandler = async (e: React.MouseEvent<HTMLButtonElement>) => {
+
         if (!pravnoLice) {
             kupac.pib = undefined;
         }
+
         const faktura: Faktura = {
             broj: brojFakture,
             izdavac: izdavac,
@@ -55,7 +56,7 @@ const NovaFakturaForma = () => {
             valutaPlacanja: valutaPlacanja,
             datumIzdavanja: new Date(datumIzdavanjaRef.current!.value),
             rokPlacanja: new Date(rokPlacanjaRef.current!.value),
-            status: StatusFakture.PRIPREMA,
+            status: e.currentTarget.id === 'posalji' ? StatusFakture.POSLATA : StatusFakture.PRIPREMA,
             stavke: stavkeFakture
         }
 
@@ -172,7 +173,7 @@ const NovaFakturaForma = () => {
     }
 
     return (
-        <form className={styles.forma} onSubmit={sacuvajFakturuHandler}>
+        <form className={styles.forma}>
 
             <h2>Izdavac</h2>
             <div className={styles['izdavac-wrapper']}>
@@ -188,6 +189,10 @@ const NovaFakturaForma = () => {
                 <div className={styles['form-element']}>
                     <label htmlFor='nazivIzdavaca'>Naziv *</label>
                     <input value={izdavac.naziv} onChange={promeniIzdavacaHandler} id='nazivIzdavaca' name='naziv' />
+                </div>
+                <div className={styles['form-element']}>
+                    <label htmlFor='emailIzdavaca'>E-mail *</label>
+                    <input value={izdavac.email} onChange={promeniIzdavacaHandler} id='emailIzdavaca' name='email' />
                 </div>
                 <div className={styles['form-element']}>
                     <label htmlFor='telefonIzdavaca'>Telefon *</label>
@@ -266,6 +271,11 @@ const NovaFakturaForma = () => {
                 </div>
 
                 <div className={styles['form-element']}>
+                    <label htmlFor='emailKupca'>E-mail *</label>
+                    <input value={kupac.email} onChange={promeniKupcaHandler} id='emailKupca' name='email' />
+                </div>
+
+                <div className={styles['form-element']}>
                     <label htmlFor='telefonKupca'>Telefon *</label>
                     <input value={kupac.telefon} onChange={promeniKupcaHandler} id='telefonKupca' name='telefon' />
                 </div>
@@ -327,8 +337,19 @@ const NovaFakturaForma = () => {
                 </div>
             }
 
+            {prikaziModalZaSlanjeMaila &&
+                <Modal onZatvori={() => setPrikaziModalZaSlanjeMaila(false)}>
+                    <div style={{ textAlign: 'center' }}>
+                        <p>Da li zelite da posaljete na mail?</p>
+                        <button className={styles['btn-sacuvaj-stavku']} id='posalji' onClick={sacuvajFakturuHandler}>Posalji</button>
+                        <button className={styles['btn-sacuvaj-stavku']} id='priprema' onClick={sacuvajFakturuHandler}>Samo sacuvaj</button>
+                    </div>
+
+                </Modal>
+            }
+
             <div className={styles['potvrdi-formu-wrapper']}>
-                <button>Sacuvaj fakturu</button>
+                <button onClick={() => setPrikaziModalZaSlanjeMaila(true)} type='button'>Sacuvaj fakturu</button>
             </div>
 
         </form>

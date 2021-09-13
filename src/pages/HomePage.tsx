@@ -41,12 +41,12 @@ const HomePage = () => {
 
     }, [])
 
-    const filtrirajFakture = (event: React.FormEvent<HTMLInputElement>) => {
-        if (event.currentTarget.value === FilterStanje.SVE) {
+    const filtrirajFakture = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.value === FilterStanje.SVE) {
             setFakture(fakturaContext.fakture);
             setPrimenjenFilter(FilterStanje.SVE)
         } else {
-            const status = event.currentTarget.value as StatusFakture;
+            const status = event.target.value as StatusFakture;
             setFakture(fakturaContext.fakture.filter(f => f.status === status));
             setPrimenjenFilter(event.currentTarget.value as FilterStanje)
         }
@@ -59,10 +59,6 @@ const HomePage = () => {
 
     return (
         <>
-            {/* <button className={styles['btn-filter']} type='button' onClick={omoguciFiltriranje}>
-                <span>Filtriraj</span>
-                <i className="fa fa-filter" style={{ fontSize: '14px', color: 'white', marginLeft: '5px' }}></i>
-            </button> */}
 
             {prikaziModalZaFiltriranje &&
                 <Modal onZatvori={() => setPrikaziModalZaFiltriranje(false)}>
@@ -70,17 +66,17 @@ const HomePage = () => {
                         <div>
                             <h3 style={{ marginBottom: '0.5rem' }}>Prema statusu</h3>
                             <label>Sve</label>
-                            <input onClick={filtrirajFakture} type='radio' name='status' value={FilterStanje.SVE} checked={primenjenFilter === FilterStanje.SVE} />
+                            <input onChange={filtrirajFakture} type='radio' name='status' value={FilterStanje.SVE} checked={primenjenFilter === FilterStanje.SVE} />
                             <label>Priprema</label>
-                            <input onClick={filtrirajFakture} type='radio' name='status' value={FilterStanje.PRIPREMA} checked={primenjenFilter === FilterStanje.PRIPREMA} />
+                            <input onChange={filtrirajFakture} type='radio' name='status' value={FilterStanje.PRIPREMA} checked={primenjenFilter === FilterStanje.PRIPREMA} />
                             <label>Poslata</label>
-                            <input onClick={filtrirajFakture} type='radio' name='status' value={FilterStanje.POSLATA} checked={primenjenFilter === FilterStanje.POSLATA} />
+                            <input onChange={filtrirajFakture} type='radio' name='status' value={FilterStanje.POSLATA} checked={primenjenFilter === FilterStanje.POSLATA} />
                             <label>Placena</label>
-                            <input onClick={filtrirajFakture} type='radio' name='status' value={FilterStanje.PLACENA} checked={primenjenFilter === FilterStanje.PLACENA} />
+                            <input onChange={filtrirajFakture} type='radio' name='status' value={FilterStanje.PLACENA} checked={primenjenFilter === FilterStanje.PLACENA} />
                             <label>Kasni</label>
-                            <input onClick={filtrirajFakture} type='radio' name='status' value={FilterStanje.KASNI} checked={primenjenFilter === FilterStanje.KASNI} />
+                            <input onChange={filtrirajFakture} type='radio' name='status' value={FilterStanje.KASNI} checked={primenjenFilter === FilterStanje.KASNI} />
                             <label>Stornirana</label>
-                            <input onClick={filtrirajFakture} type='radio' name='status' value={FilterStanje.STORNIRANA} checked={primenjenFilter === FilterStanje.STORNIRANA} />
+                            <input onChange={filtrirajFakture} type='radio' name='status' value={FilterStanje.STORNIRANA} checked={primenjenFilter === FilterStanje.STORNIRANA} />
                         </div>
                     </div>
                 </Modal>
@@ -98,7 +94,6 @@ const HomePage = () => {
                 </Sidebar>
                 <ListaFaktura onOmoguciFiltriranje={omoguciFiltriranje} fakture={fakture} />
             </main>
-            {/* <Link to='/dodaj-fakturu'><button className={styles['btn-dodaj-fakturu']}>Dodaj Fakturu</button></Link> */}
 
         </>
     )
