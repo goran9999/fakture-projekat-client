@@ -297,6 +297,7 @@ const NovaFakturaForma = () => {
                             <DodataStavkaItem
                                 key={s.proizvod.sifra}
                                 stavka={s}
+                                valutaPlacanja={valutaPlacanja}
                                 onUkloniStavku={ukloniStavku}
                                 onIzmeniStavku={izmeniStavku}
                                 omoguciIzmenu={true}

@@ -1,11 +1,13 @@
 import React from 'react';
 import StavkaFakture from '../../models/stavkaFakture';
-import { kapitalizujPrvoSlovo } from '../../utils/utils';
+import Valuta from '../../models/valuta';
+import { formatirajCenu, kapitalizujPrvoSlovo } from '../../utils/utils';
 
 import styles from './NovaFakturaForma.module.css'
 
 interface Props {
-    stavka: StavkaFakture
+    stavka: StavkaFakture,
+    valutaPlacanja: Valuta,
     onUkloniStavku: (sifraProizvoda: string) => void,
     onIzmeniStavku: (sifraProizvoda: string) => void
     omoguciIzmenu: boolean
@@ -30,10 +32,10 @@ const DodataStavkaItem = (props: Props) => {
             <td className={styles.td}>{nazivProizvoda}</td>
             <td className={styles.td}>{kapitalizujPrvoSlovo(tipProizvoda)}</td>
             <td className={styles.td}>{kolicina}</td>
-            <td className={styles.td}>{osnovnaCenaProizvoda}</td>
+            <td className={styles.td}>{formatirajCenu(osnovnaCenaProizvoda, props.valutaPlacanja)}</td>
             <td className={styles.td}>{pdvProizvoda}</td>
             <td className={styles.td}>{osnovnaCenaProizvoda * pdvProizvoda / 100}</td>
-            <td className={styles.td}>{(osnovnaCenaProizvoda + (osnovnaCenaProizvoda * pdvProizvoda) / 100) * kolicina}</td>
+            <td className={styles.td}>{formatirajCenu((osnovnaCenaProizvoda + (osnovnaCenaProizvoda * pdvProizvoda) / 100) * kolicina, props.valutaPlacanja)}</td>
             {props.omoguciIzmenu &&
                 <>
                     <td className={styles.td}>

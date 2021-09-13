@@ -5,6 +5,15 @@ export function formatirajDatum(datum: Date): string {
     return `${datum.getDate()}.${datum.getMonth()}.${datum.getFullYear()}`
 }
 
+export function formatirajCenu(cena: number, valuta: Valuta): string {
+    switch (valuta) {
+        case Valuta.DINAR: return `${cena} RSD`;
+        case Valuta.EVRO: return `€${cena}`;
+        case Valuta.DOLAR: return `$${cena}`;
+        default: throw Error('Prosledjena je losa valuta kao arguemnt')
+    }
+}
+
 export function vratiSkraceniNazivValute(valuta: Valuta): string {
     switch (valuta) {
         case Valuta.DINAR: return 'RSD';

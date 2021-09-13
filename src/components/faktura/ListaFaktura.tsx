@@ -7,7 +7,7 @@ import styles from './ListaFaktura.module.css'
 
 interface Props {
     fakture: Faktura[],
-    onOmoguciFiltriranje:()=>void,
+    onOmoguciFiltriranje: () => void,
 }
 
 const ListaFaktura = (props: Props) => {
@@ -27,34 +27,35 @@ const ListaFaktura = (props: Props) => {
     return (
         <>
 
-        <table className={styles.table}>
-            <thead>
-                <tr>
-                    <th className={styles.th}>Broj</th>
-                    <th className={styles.th}>Izdavac</th>
-                    <th className={styles.th}>Kupac</th>
-                    <th className={styles.th}>Datum izdavanja</th>
-                    <th className={styles.th}>Iznos</th>
-                    <th className={styles.th}>Status</th>
-                    <th className={styles.th}></th>
-                    <th className={styles.th}></th>
-                </tr>
-            </thead>
-            <tbody>
-                {props.fakture.map(f =>
-                    <FakturaItem
-                        key={f.broj}
-                        broj={f.broj}
-                        imeIzdavaca={f.izdavac.naziv}
-                        imeKupca={f.kupac.naziv}
-                        datumIzdavanja={f.datumIzdavanja}
-                        ukupanIznos={izracunajUkupanIznos(f.stavke)}
-                        status={f.status}
-                    />
-                )}
-            </tbody>
+            <table className={styles.table}>
+                <thead>
+                    <tr>
+                        <th className={styles.th}>Broj</th>
+                        <th className={styles.th}>Izdavac</th>
+                        <th className={styles.th}>Kupac</th>
+                        <th className={styles.th}>Datum izdavanja</th>
+                        <th className={styles.th}>Iznos</th>
+                        <th className={styles.th}>Status</th>
+                        <th className={styles.th}></th>
+                        <th className={styles.th}></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {props.fakture.map(f =>
+                        <FakturaItem
+                            key={f.broj}
+                            broj={f.broj}
+                            imeIzdavaca={f.izdavac.naziv}
+                            imeKupca={f.kupac.naziv}
+                            datumIzdavanja={f.datumIzdavanja}
+                            valutaPlacanja={f.valutaPlacanja}
+                            ukupanIznos={izracunajUkupanIznos(f.stavke)}
+                            status={f.status}
+                        />
+                    )}
+                </tbody>
 
-        </table>
+            </table>
         </>
     )
 

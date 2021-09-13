@@ -1,6 +1,6 @@
 import Faktura from "../../models/faktura";
 import StavkaFakture from "../../models/stavkaFakture";
-import { formatirajDatum } from "../../utils/utils";
+import { formatirajCenu, formatirajDatum } from "../../utils/utils";
 import DodataStavkaItem from "../forma/DodataStavkaItem";
 import styles from './DetaljnaFaktura.module.css'
 
@@ -71,6 +71,7 @@ const DetaljnaFaktura = (props: Props) => {
                         <DodataStavkaItem
                             key={s.proizvod.sifra}
                             stavka={s}
+                            valutaPlacanja={props.faktura.valutaPlacanja}
                             omoguciIzmenu={false}
                             onIzmeniStavku={izmeniStavku}
                             onUkloniStavku={ukloniStavku}
@@ -79,7 +80,8 @@ const DetaljnaFaktura = (props: Props) => {
                 </tbody>
 
             </table>
-            <h2 className={styles.ukupno}>Ukupno:{`${izracunajUkupanIznos(props.faktura.stavke)} ${props.faktura.valutaPlacanja}`}</h2>
+
+            <h2 className={styles.ukupno}>Ukupno: {formatirajCenu(izracunajUkupanIznos(props.faktura.stavke), props.faktura.valutaPlacanja)}</h2>
         </div>
     )
 }
