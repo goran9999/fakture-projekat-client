@@ -1,5 +1,6 @@
 import Faktura from "../../models/faktura";
 import StavkaFakture from "../../models/stavkaFakture";
+import { formatirajDatum } from "../../utils/utils";
 import DodataStavkaItem from "../forma/DodataStavkaItem";
 import styles from './DetaljnaFaktura.module.css'
 
@@ -38,9 +39,9 @@ const DetaljnaFaktura = (props: Props) => {
                     <h4>Mesto izdavanja</h4>
                     <p>{props.faktura.mestoIzdavanja.grad}</p>
                     <h4>Datum izdavanja</h4>
-                    <p>{props.faktura.datumIzdavanja}</p>
+                    <p>{formatirajDatum(new Date(props.faktura.datumIzdavanja.toString()))}</p>
                     <h4>Rok placanja</h4>
-                    <p>{props.faktura.rokPlacanja}</p>
+                    <p>{formatirajDatum(new Date(props.faktura.rokPlacanja.toString()))}</p>
                 </div>
             </div>
             <div className={styles.kupac}>
@@ -59,7 +60,7 @@ const DetaljnaFaktura = (props: Props) => {
                         <th>Tip</th>
                         <th>Kolicina</th>
                         <th>Osnovna cena</th>
-                        <th>PDV</th>
+                        <th>PDV %</th>
                         <th>Iznos PDV</th>
                         <th>Ukupna vrednost</th>
                     </tr>

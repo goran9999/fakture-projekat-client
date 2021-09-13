@@ -1,5 +1,6 @@
 import React from 'react';
 import StavkaFakture from '../../models/stavkaFakture';
+import { kapitalizujPrvoSlovo } from '../../utils/utils';
 
 import styles from './NovaFakturaForma.module.css'
 
@@ -27,7 +28,7 @@ const DodataStavkaItem = (props: Props) => {
         <tr>
             <td className={styles.td}>{sifraProizvoda}</td>
             <td className={styles.td}>{nazivProizvoda}</td>
-            <td className={styles.td}>{tipProizvoda}</td>
+            <td className={styles.td}>{kapitalizujPrvoSlovo(tipProizvoda)}</td>
             <td className={styles.td}>{kolicina}</td>
             <td className={styles.td}>{osnovnaCenaProizvoda}</td>
             <td className={styles.td}>{pdvProizvoda}</td>

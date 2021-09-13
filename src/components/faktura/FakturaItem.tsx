@@ -1,7 +1,7 @@
 import React from "react";
 import { useHistory } from 'react-router-dom'
 import { StatusFakture } from "../../models/faktura";
-import { formatirajDatum, vratiCssKlasuStatusaFakture } from "../../utils/utils";
+import { formatirajDatum, kapitalizujPrvoSlovo, vratiCssKlasuStatusaFakture } from "../../utils/utils";
 
 import styles from './ListaFaktura.module.css'
 
@@ -32,10 +32,11 @@ const FakturaItem = (props: Props) => {
             <td className={styles.td}>{props.ukupanIznos}</td>
             <td className={styles.td}>
                 <span className={`${styles.status} ${styles[vratiCssKlasuStatusaFakture(props.status)]}`}>
-                    {props.status}
+                    {kapitalizujPrvoSlovo(props.status)}
                 </span>
             </td>
             <td className={styles.td}><button className={styles['btn-detalji']} onClick={vidiDetaljeHandler}>Detalji</button></td>
+            <td className={styles.td}><button className={styles['btn-detalji']} onClick={vidiDetaljeHandler}>Storniraj</button></td>
         </tr>
     )
 }

@@ -77,18 +77,18 @@ const DodavanjeStavke = (props: Props) => {
     return (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)' }}>
             <div className={styles['form-element']}>
-                <label>Sifra</label>
+                <label>Sifra *</label>
                 <input value={sifra} onChange={promeniSifruHandler} />
             </div>
 
             <div className={styles['form-element']}>
-                <label>Naziv</label>
+                <label>Naziv *</label>
                 <input value={naziv} onChange={promeniNazivHandler} />
             </div>
 
 
             <div className={styles['form-element']}>
-                <label>Tip</label>
+                <label>Tip *</label>
                 <select value={tip} onChange={promeniTipHandler}>
                     <option value={TipProizvoda.PROIZVOD}>Proizvod</option>
                     <option value={TipProizvoda.USLUGA}>Usluga</option>
@@ -96,17 +96,17 @@ const DodavanjeStavke = (props: Props) => {
             </div>
 
             <div className={styles['form-element']}>
-                <label>Kolicina</label>
+                <label>Kolicina *</label>
                 <input value={kolicina} onChange={promeniKolicinuHandler} />
             </div>
 
             <div className={styles['form-element']}>
-                <label htmlFor="">Osnovna cena</label>
+                <label htmlFor="">Osnovna cena *</label>
                 <input value={osnovnaCena} onChange={promeniOsnovnuCenuHandler} />
             </div>
 
             <div className={styles['form-element']}>
-                <label htmlFor="">PDV</label>
+                <label htmlFor="">PDV *</label>
                 <input value={pdv} onChange={promeniPdvHandler} />
             </div>
 

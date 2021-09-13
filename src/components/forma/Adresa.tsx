@@ -5,7 +5,8 @@ import styles from './NovaFakturaForma.module.css'
 
 
 interface Props {
-    onChange: (izmenjenaAdresa: AdresaModel) => void
+    onChange: (izmenjenaAdresa: AdresaModel) => void,
+    obaveznaPolja: boolean
 }
 
 const Adresa = (props: Props) => {
@@ -25,22 +26,22 @@ const Adresa = (props: Props) => {
     return (
         <>
             <div className={styles['form-element']}>
-                <label htmlFor='postBroj'>Postanski broj</label>
+                <label htmlFor='postBroj'>Postanski broj *</label>
                 <input value={adresa.postBroj} onChange={promeniAdresuHandler} id='postBroj' name='postBroj' />
             </div>
 
             <div className={styles['form-element']}>
-                <label htmlFor='grad'>Grad</label>
+                <label htmlFor='grad'>Grad *</label>
                 <input value={adresa.grad} onChange={promeniAdresuHandler} id='grad' name='grad' />
             </div>
 
             <div className={styles['form-element']}>
-                <label htmlFor='ulica'>Ulica</label>
+                <label htmlFor='ulica'>Ulica {props.obaveznaPolja ? '*' : ''}</label>
                 <input value={adresa.ulica} onChange={promeniAdresuHandler} id='ulica' name='ulica' />
             </div>
 
             <div className={styles['form-element']}>
-                <label htmlFor='brUlice'>Broj ulice</label>
+                <label htmlFor='brUlice'>Broj ulice {props.obaveznaPolja ? '*' : ''}</label>
                 <input value={adresa.brUlice} onChange={promeniAdresuHandler} id='brUlice' name='brUlice' />
             </div>
         </>

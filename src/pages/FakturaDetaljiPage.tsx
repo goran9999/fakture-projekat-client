@@ -12,11 +12,7 @@ const FakturaDetaljiPage = () => {
     const { brojFakture } = useParams<{ brojFakture: string }>();
 
     useEffect(() => {
-        const faktura = fakturaContext.fakture.find(f => {
-            console.log(`Broj fakture param = ${brojFakture}, broj fakture iteracija = ${f.broj}`)
-            console.log(brojFakture === f.broj)
-            return f.broj === brojFakture
-        })!
+        const faktura = fakturaContext.fakture.find(f => f.broj === brojFakture)
 
         if (!faktura) {
             fetch(`http://localhost:5000/api/fakture/${brojFakture}`)

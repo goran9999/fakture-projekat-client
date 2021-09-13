@@ -4,11 +4,12 @@
 }
 
 .table {
-  border-collapse: collapse;
+    margin-top: 1rem;
+    border-collapse: collapse;
 }
 
 .th, .td {
-    padding: 3rem 2rem;
+    padding: 2rem;
     text-align: center;
     font-size: 14px;
 }

@@ -34,6 +34,7 @@ const ListaFaktura = (props: Props) => {
                     <th className={styles.th}>Iznos</th>
                     <th className={styles.th}>Status</th>
                     <th className={styles.th}></th>
+                    <th className={styles.th}></th>
                 </tr>
             </thead>
             <tbody>

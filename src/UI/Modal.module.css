@@ -24,7 +24,7 @@
 @media (min-width: 768px) {
     .modal {
         width: 45.5rem;
-        left: calc(25% - 20rem);
+        left: calc(45% - 20rem);
     }
 }
 @keyframes slide-down {

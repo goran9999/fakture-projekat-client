@@ -12,6 +12,7 @@ import Komitent, { defaultKomitent } from "../../models/komitent"
 import styles from './NovaFakturaForma.module.css'
 import Modal from "../../UI/Modal"
 import IzmenaDodateStavke from "./IzmenaDodateStavke"
+import { vratiSkraceniNazivValute } from "../../utils/utils"
 
 
 const NovaFakturaForma = () => {
@@ -194,7 +195,7 @@ const NovaFakturaForma = () => {
                     <input value={izdavac.telefon} onChange={promeniIzdavacaHandler} id='telefonIzdavaca' name='telefon' />
                 </div>
 
-                <Adresa onChange={promeniAdresuIzdavacaHandler} />
+                <Adresa onChange={promeniAdresuIzdavacaHandler} obaveznaPolja={true} />
 
             </div>
 
@@ -210,19 +211,19 @@ const NovaFakturaForma = () => {
                 <div className={styles['form-element']}>
                     <label htmlFor='valutaPlacanja' style={{ display: 'block' }}>Valuta *</label>
                     <select value={valutaPlacanja} onChange={promeniValutuPlacanjaHandler} id='valutaPlacanja' name='valutaPlacanja'>
-                        <option value={Valuta.DINAR}>RSD</option>
-                        <option value={Valuta.EVRO}>EUR</option>
-                        <option value={Valuta.DOLAR}>USD</option>
+                        <option value={Valuta.DINAR}>{vratiSkraceniNazivValute(Valuta.DINAR)}</option>
+                        <option value={Valuta.EVRO}>{vratiSkraceniNazivValute(Valuta.EVRO)}</option>
+                        <option value={Valuta.DOLAR}>{vratiSkraceniNazivValute(Valuta.DOLAR)}</option>
                     </select>
                 </div>
 
                 <div className={styles['form-element']}>
-                    <label htmlFor='datumIzdavanja'>Datum izdavanja</label>
+                    <label htmlFor='datumIzdavanja'>Datum izdavanja *</label>
                     <input type='date' ref={datumIzdavanjaRef} onChange={promeniDatumIzdavanjaHandler} id='datumIzdavanja' />
                 </div>
 
                 <div className={styles['form-element']}>
-                    <label htmlFor='rokPlacanja'>Rok placanja</label>
+                    <label htmlFor='rokPlacanja'>Rok placanja *</label>
                     <input type='date' ref={rokPlacanjaRef} onChange={promeniRokPlacanjaHandler} />
                 </div>
 
@@ -230,7 +231,7 @@ const NovaFakturaForma = () => {
 
             <h2>Mesto izdavanja</h2>
             <div className={styles['mesto-izdavanja-wrapper']}>
-                <Adresa onChange={promeniMestoIzdavanjaHandler} />
+                <Adresa onChange={promeniMestoIzdavanjaHandler} obaveznaPolja={false} />
             </div>
 
 
@@ -251,7 +252,7 @@ const NovaFakturaForma = () => {
                 </div>
 
                 <div className={styles['form-element']}>
-                    <label htmlFor='maticniBrojKupca'>Maticni broj</label>
+                    <label htmlFor='maticniBrojKupca'>Maticni broj *</label>
                     <input value={kupac.maticniBroj} onChange={promeniKupcaHandler} id='maticniBrojKupca' name='maticniBroj' />
                 </div>
 
@@ -261,16 +262,16 @@ const NovaFakturaForma = () => {
                 </div>
 
                 <div className={styles['form-element']}>
-                    <label htmlFor='nazivKupca'>Naziv</label>
+                    <label htmlFor='nazivKupca'>{pravnoLice ? 'Naziv' : 'Ime i prezime'} *</label>
                     <input value={kupac.naziv} onChange={promeniKupcaHandler} id='nazivKupca' name='naziv' />
                 </div>
 
                 <div className={styles['form-element']}>
-                    <label htmlFor='telefonKupca'>Telefon</label>
+                    <label htmlFor='telefonKupca'>Telefon *</label>
                     <input value={kupac.telefon} onChange={promeniKupcaHandler} id='telefonKupca' name='telefon' />
                 </div>
 
-                <Adresa onChange={promeniAdresuKupcaHandler} />
+                <Adresa onChange={promeniAdresuKupcaHandler} obaveznaPolja={true} />
             </div>
 
 
@@ -284,7 +285,7 @@ const NovaFakturaForma = () => {
                             <th className={styles.th}>Tip</th>
                             <th className={styles.th}>Kolicina</th>
                             <th className={styles.th}>Osnovna cena</th>
-                            <th className={styles.th}>PDV</th>
+                            <th className={styles.th}>PDV %</th>
                             <th className={styles.th}>Iznos PDV</th>
                             <th className={styles.th}>Ukupna vrednost</th>
                             <th className={styles.th}></th>
