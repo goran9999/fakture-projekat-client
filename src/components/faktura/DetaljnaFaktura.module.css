@@ -8,7 +8,7 @@
 .izdavac{
     margin:50px;
 }
-.izdavac > h1{
+.izdavac > h2 {
     margin-top: 40px;
 }
 .izdavac > p {
@@ -48,7 +48,7 @@
     background-color: #171717;
     color: white;
     width: max-content;
-    padding: 0.5rem;
+    padding: 1rem;
 }
 
 .btn-posalji {

@@ -59,11 +59,17 @@ const DodavanjeStavke = (props: Props) => {
     }
 
     const promeniOsnovnuCenuHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setOsnovnaCena(+e.target.value)
+        const num = +e.target.value
+        if (typeof num === 'number' && !isNaN(num)) {
+            setOsnovnaCena(num)
+        }
     }
 
     const promeniPdvHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setPdv(+e.target.value)
+        const num = +e.target.value
+        if (typeof num === 'number' && !isNaN(num)) {
+            setPdv(num)
+        }
     }
 
     const promeniTipHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -71,7 +77,10 @@ const DodavanjeStavke = (props: Props) => {
     }
 
     const promeniKolicinuHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setKolicina(+e.target.value)
+        const num = +e.target.value
+        if (typeof num === 'number' && !isNaN(num)) {
+            setKolicina(num)
+        }
     }
 
     return (

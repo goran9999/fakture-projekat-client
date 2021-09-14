@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react"
+import React, { useContext, useRef, useState } from "react"
 import { useHistory } from "react-router"
 import AdresaModel, { defaultAdresa } from "../../models/adresa"
 import Faktura, { StatusFakture } from "../../models/faktura"
@@ -13,11 +13,13 @@ import styles from './NovaFakturaForma.module.css'
 import Modal from "../../UI/Modal"
 import IzmenaDodateStavke from "./IzmenaDodateStavke"
 import { vratiSkraceniNazivValute } from "../../utils/utils"
+import { FakturaContext } from "../../store/faktura-context"
 
 
 const NovaFakturaForma = () => {
 
     const history = useHistory()
+    const fakturaContext = useContext(FakturaContext);
 
     const [brojFakture, setBrojFakture] = useState('');
 
@@ -41,6 +43,7 @@ const NovaFakturaForma = () => {
     // refs
     const datumIzdavanjaRef = useRef<HTMLInputElement>(null);
     const rokPlacanjaRef = useRef<HTMLInputElement>(null);
+
 
     const sacuvajFakturuHandler = async (e: React.MouseEvent<HTMLButtonElement>) => {
 
@@ -75,6 +78,7 @@ const NovaFakturaForma = () => {
                 throw new Error('Problem u cuvanju fakture.')
             }
 
+            fakturaContext.dodajFakturu(faktura)
             history.replace('/')
         } catch (e) {
             console.log(e)
@@ -339,10 +343,10 @@ const NovaFakturaForma = () => {
 
             {prikaziModalZaSlanjeMaila &&
                 <Modal onZatvori={() => setPrikaziModalZaSlanjeMaila(false)}>
-                    <div style={{ textAlign: 'center' }}>
-                        <p>Da li zelite da posaljete na mail?</p>
+                    <div style={{ textAlign: 'center', margin: '1rem' }}>
+                        <p style={{ width: '60%', margin: '1rem auto' }}>Da li zelite ujedno da posaljete fakturu na mail <strong>{kupac.email}</strong>?</p>
                         <button className={styles['btn-sacuvaj-stavku']} id='posalji' onClick={sacuvajFakturuHandler}>Posalji</button>
-                        <button className={styles['btn-sacuvaj-stavku']} id='priprema' onClick={sacuvajFakturuHandler}>Samo sacuvaj</button>
+                        <button className={styles['btn-sacuvaj-stavku']} id='priprema' onClick={sacuvajFakturuHandler}>Nemoj</button>
                     </div>
 
                 </Modal>

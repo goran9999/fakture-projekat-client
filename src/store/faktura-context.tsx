@@ -20,7 +20,7 @@ const FakturaProvider: React.FC = props => {
 
     const dodajFakturuHandler = (faktura: Faktura) => {
         setFakture(prevFakture => {
-            return prevFakture.concat(faktura);
+            return [faktura, ...prevFakture];
         })
     }
 

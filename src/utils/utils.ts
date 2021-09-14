@@ -10,7 +10,7 @@ export function formatirajCenu(cena: number, valuta: Valuta): string {
         case Valuta.DINAR: return `${cena} RSD`;
         case Valuta.EVRO: return `€${cena}`;
         case Valuta.DOLAR: return `$${cena}`;
-        default: throw Error('Prosledjena je losa valuta kao arguemnt')
+        default: throw Error('Prosledjena je losa valuta kao argument')
     }
 }
 
