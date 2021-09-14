@@ -1,31 +1,19 @@
 import React from "react";
 import Faktura from "../../models/faktura";
 import FakturaItem from "./FakturaItem";
-import StavkaFakture from "../../models/stavkaFakture";
 
 import styles from './ListaFaktura.module.css'
+import { izracunajUkupnuVrednostFakture } from "../../utils/utils";
 
 interface Props {
     fakture: Faktura[],
     onOmoguciFiltriranje: () => void,
 }
 
-const ListaFaktura = (props: Props) => {
-
-    function izracunajUkupanIznos(stavke: StavkaFakture[]): number {
-        let ukupanIznos = 0;
-
-        stavke.forEach(stavka => {
-            let ukupnaVrednostStavke = stavka.proizvod.osnovnaCena * stavka.kolicina;
-            ukupanIznos += ukupnaVrednostStavke + (ukupnaVrednostStavke * stavka.proizvod.pdv / 100);
-        })
-
-        return ukupanIznos;
-        // return stavke.reduce((total, stavka) => stavka.proizvod.osnovnaCena + ((stavka.proizvod.osnovnaCena * stavka.proizvod.pdv) / 100) * stavka.kolicina, 0)
-    }
+const ListaFaktura = ({ fakture, onOmoguciFiltriranje }: Props) => {
 
     return (
-        <>
+        <div style={{ padding: '3rem 2rem' }}>
             <table className={styles.table}>
                 <thead>
                     <tr className={styles.tr}>
@@ -38,7 +26,7 @@ const ListaFaktura = (props: Props) => {
                         <th className={styles.th}>
                             <button
                                 className={styles['btn-filter']}
-                                onClick={props.onOmoguciFiltriranje}
+                                onClick={onOmoguciFiltriranje}
                             >Filtriraj
                             </button>
                         </th>
@@ -46,7 +34,7 @@ const ListaFaktura = (props: Props) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {props.fakture.map(f =>
+                    {fakture.map(f =>
                         <FakturaItem
                             key={f.broj}
                             broj={f.broj}
@@ -54,14 +42,19 @@ const ListaFaktura = (props: Props) => {
                             imeKupca={f.kupac.naziv}
                             datumIzdavanja={f.datumIzdavanja}
                             valutaPlacanja={f.valutaPlacanja}
-                            ukupanIznos={izracunajUkupanIznos(f.stavke)}
+                            ukupanIznos={izracunajUkupnuVrednostFakture(f.stavke)}
                             status={f.status}
                         />
                     )}
                 </tbody>
 
             </table>
-        </>
+            {fakture.length === 0 &&
+                <p style={{ padding: '2rem 0', textAlign: 'center' }}>
+                    Nijedna faktura ne zadovoljava postavljeni uslov
+                </p>
+            }
+        </div>
     )
 
 }

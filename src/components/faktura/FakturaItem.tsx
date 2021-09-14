@@ -16,25 +16,25 @@ interface Props {
     status: StatusFakture
 }
 
-const FakturaItem = (props: Props) => {
+const FakturaItem = ({ broj, imeIzdavaca, imeKupca, datumIzdavanja, valutaPlacanja, ukupanIznos, status }: Props) => {
 
     const history = useHistory();
 
     const vidiDetaljeHandler = () => {
-        history.push(`/fakture/${props.broj}`)
+        history.push(`/fakture/${broj}`)
     }
 
     return (
         <tr className={styles.tr}>
-            <td className={styles.td}>#{props.broj}</td>
-            <td className={styles.td}>{props.imeIzdavaca}</td>
-            <td className={styles.td}>{props.imeKupca}</td>
+            <td className={styles.td}>#{broj}</td>
+            <td className={styles.td}>{imeIzdavaca}</td>
+            <td className={styles.td}>{imeKupca}</td>
             {/* neki bag sa typescript datumima pa je moralo ovako */}
-            <td className={styles.td}>{formatirajDatum(new Date(props.datumIzdavanja.toString()))}</td>
-            <td className={styles.td}>{formatirajCenu(props.ukupanIznos, props.valutaPlacanja)}</td>
+            <td className={styles.td}>{formatirajDatum(new Date(datumIzdavanja.toString()))}</td>
+            <td className={styles.td}>{formatirajCenu(ukupanIznos, valutaPlacanja)}</td>
             <td className={styles.td}>
-                <span className={`${styles.status} ${styles[vratiCssKlasuStatusaFakture(props.status)]}`}>
-                    {kapitalizujPrvoSlovo(props.status)}
+                <span className={`${styles.status} ${styles[vratiCssKlasuStatusaFakture(status)]}`}>
+                    {kapitalizujPrvoSlovo(status)}
                 </span>
             </td>
             <td className={styles.td}><button className={styles['btn-detalji']} onClick={vidiDetaljeHandler}>Detalji</button></td>

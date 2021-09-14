@@ -9,7 +9,7 @@ interface Props {
     obaveznaPolja: boolean
 }
 
-const Adresa = (props: Props) => {
+const Adresa = ({ onChange, obaveznaPolja }: Props) => {
 
     const [adresa, setAdresa] = useState(defaultAdresa)
 
@@ -20,7 +20,7 @@ const Adresa = (props: Props) => {
             [nazivPolja]: nazivPolja === 'postBroj' ? +e.target.value : e.target.value
         }
         setAdresa(izmenjenaAdresa)
-        props.onChange(izmenjenaAdresa)
+        onChange(izmenjenaAdresa)
     }
 
     return (
@@ -36,12 +36,12 @@ const Adresa = (props: Props) => {
             </div>
 
             <div className={styles['form-element']}>
-                <label htmlFor='ulica'>Ulica {props.obaveznaPolja ? '*' : ''}</label>
+                <label htmlFor='ulica'>Ulica {obaveznaPolja ? '*' : ''}</label>
                 <input value={adresa.ulica} onChange={promeniAdresuHandler} id='ulica' name='ulica' />
             </div>
 
             <div className={styles['form-element']}>
-                <label htmlFor='brUlice'>Broj ulice {props.obaveznaPolja ? '*' : ''}</label>
+                <label htmlFor='brUlice'>Broj ulice {obaveznaPolja ? '*' : ''}</label>
                 <input value={adresa.brUlice} onChange={promeniAdresuHandler} id='brUlice' name='brUlice' />
             </div>
         </>

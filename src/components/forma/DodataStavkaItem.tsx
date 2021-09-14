@@ -1,41 +1,41 @@
 import React from 'react';
 import StavkaFakture from '../../models/stavkaFakture';
 import Valuta from '../../models/valuta';
-import { formatirajCenu, kapitalizujPrvoSlovo } from '../../utils/utils';
+import { formatirajCenu, izracunajUkupnuVrednostStavke, kapitalizujPrvoSlovo } from '../../utils/utils';
 
 import styles from './NovaFakturaForma.module.css'
 
 interface Props {
     stavka: StavkaFakture,
     valutaPlacanja: Valuta,
-    onUkloniStavku: (sifraProizvoda: string) => void,
-    onIzmeniStavku: (sifraProizvoda: string) => void
+    onUkloniStavku: (sifra: string) => void,
+    onIzmeniStavku: (sifra: string) => void
     omoguciIzmenu: boolean
 }
 
 const DodataStavkaItem = (props: Props) => {
 
-    const { sifra: sifraProizvoda, naziv: nazivProizvoda, tip: tipProizvoda, osnovnaCena: osnovnaCenaProizvoda, pdv: pdvProizvoda } = props.stavka.proizvod;
+    const { sifra, naziv, tip, osnovnaCena, pdv } = props.stavka.proizvod;
     const { kolicina } = props.stavka
 
     const ukloniStavkuHandler = () => {
-        props.onUkloniStavku(sifraProizvoda);
+        props.onUkloniStavku(sifra);
     }
 
     const izmeniStavkuHandler = () => {
-        props.onIzmeniStavku(sifraProizvoda)
+        props.onIzmeniStavku(sifra)
     }
 
     return (
         <tr>
-            <td className={styles.td}>{sifraProizvoda}</td>
-            <td className={styles.td}>{nazivProizvoda}</td>
-            <td className={styles.td}>{kapitalizujPrvoSlovo(tipProizvoda)}</td>
+            <td className={styles.td}>{sifra}</td>
+            <td className={styles.td}>{naziv}</td>
+            <td className={styles.td}>{kapitalizujPrvoSlovo(tip)}</td>
             <td className={styles.td}>{kolicina}</td>
-            <td className={styles.td}>{formatirajCenu(osnovnaCenaProizvoda, props.valutaPlacanja)}</td>
-            <td className={styles.td}>{pdvProizvoda}</td>
-            <td className={styles.td}>{osnovnaCenaProizvoda * pdvProizvoda / 100}</td>
-            <td className={styles.td}>{formatirajCenu((osnovnaCenaProizvoda + (osnovnaCenaProizvoda * pdvProizvoda) / 100) * kolicina, props.valutaPlacanja)}</td>
+            <td className={styles.td}>{formatirajCenu(osnovnaCena, props.valutaPlacanja)}</td>
+            <td className={styles.td}>{pdv}</td>
+            <td className={styles.td}>{osnovnaCena * pdv / 100}</td>
+            <td className={styles.td}>{formatirajCenu(izracunajUkupnuVrednostStavke(props.stavka), props.valutaPlacanja)}</td>
             {props.omoguciIzmenu &&
                 <>
                     <td className={styles.td}>

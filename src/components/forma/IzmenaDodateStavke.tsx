@@ -10,7 +10,7 @@ interface Props {
     onOdustaniOdIzmene: () => void
 }
 
-const IzmenaDodateStavke = (props: Props) => {
+const IzmenaDodateStavke = ({ stavka, onSacuvajIzmene, onOdustaniOdIzmene }: Props) => {
 
     const [sifra, setSifra] = useState('');
     const [naziv, setNaziv] = useState('');
@@ -20,13 +20,13 @@ const IzmenaDodateStavke = (props: Props) => {
     const [kolicina, setKolicina] = useState(1);
 
     useEffect(() => {
-        setSifra(props.stavka.proizvod.sifra)
-        setNaziv(props.stavka.proizvod.naziv)
-        setTip(props.stavka.proizvod.tip)
-        setOsnovnaCena(props.stavka.proizvod.osnovnaCena)
-        setPdv(props.stavka.proizvod.pdv)
-        setKolicina(props.stavka.kolicina)
-    }, [props])
+        setSifra(stavka.proizvod.sifra)
+        setNaziv(stavka.proizvod.naziv)
+        setTip(stavka.proizvod.tip)
+        setOsnovnaCena(stavka.proizvod.osnovnaCena)
+        setPdv(stavka.proizvod.pdv)
+        setKolicina(stavka.kolicina)
+    }, [stavka])
 
     const sacuvajIzmeneHandler = () => {
 
@@ -40,7 +40,7 @@ const IzmenaDodateStavke = (props: Props) => {
             },
             kolicina: kolicina
         }
-        props.onSacuvajIzmene(izmenjenaStavka);
+        onSacuvajIzmene(izmenjenaStavka);
     }
 
     const promeniSifruHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,23 +68,23 @@ const IzmenaDodateStavke = (props: Props) => {
     }
 
     const odustaniOdIzmeneHandler = () => {
-        props.onOdustaniOdIzmene();
+        onOdustaniOdIzmene();
     }
 
     return (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)' }}>
             <div className={styles['form-element']}>
-                <label htmlFor="">Sifra</label>
+                <label htmlFor="">Sifra *</label>
                 <input value={sifra} onChange={promeniSifruHandler} />
             </div>
 
             <div className={styles['form-element']}>
-                <label htmlFor="">Naziv</label>
+                <label htmlFor="">Naziv *</label>
                 <input value={naziv} onChange={promeniNazivHandler} />
             </div>
 
             <div className={styles['form-element']}>
-                <label htmlFor="">Tip</label>
+                <label htmlFor="">Tip *</label>
                 <select value={tip} onChange={promeniTipHandler}>
                     <option value={TipProizvoda.PROIZVOD}>Proizvod</option>
                     <option value={TipProizvoda.USLUGA}>Usluga</option>
@@ -92,18 +92,18 @@ const IzmenaDodateStavke = (props: Props) => {
             </div>
 
             <div className={styles['form-element']}>
-                <label htmlFor="">Kolicina</label>
+                <label htmlFor="">Kolicina *</label>
                 <input value={kolicina} onChange={promeniKolicinuHandler} />
             </div>
 
 
             <div className={styles['form-element']}>
-                <label htmlFor="">Osnovna cena</label>
+                <label htmlFor="">Osnovna cena *</label>
                 <input value={osnovnaCena} onChange={promeniOsnovnuCenuHandler} />
             </div>
 
             <div className={styles['form-element']}>
-                <label htmlFor="">PDV</label>
+                <label htmlFor="">PDV % *</label>
                 <input value={pdv} onChange={promeniPdvHandler} />
             </div>
 

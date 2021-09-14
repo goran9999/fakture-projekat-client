@@ -9,7 +9,7 @@ interface Props {
     onOdustaniOdUnosa: () => void
 }
 
-const DodavanjeStavke = (props: Props) => {
+const DodavanjeStavke = ({ onSacuvajStavku, onOdustaniOdUnosa }: Props) => {
 
     const [sifra, setSifra] = useState('');
     const [naziv, setNaziv] = useState('');
@@ -32,13 +32,13 @@ const DodavanjeStavke = (props: Props) => {
             kolicina: kolicina
         }
 
-        props.onSacuvajStavku(stavka)
+        onSacuvajStavku(stavka)
         resetujStavku()
     }
 
     const odustaniOdUnosaHandler = () => {
         resetujStavku()
-        props.onOdustaniOdUnosa()
+        onOdustaniOdUnosa()
     }
 
     const resetujStavku = () => {
@@ -115,7 +115,7 @@ const DodavanjeStavke = (props: Props) => {
             </div>
 
             <div className={styles['form-element']}>
-                <label htmlFor="">PDV *</label>
+                <label htmlFor="">PDV % *</label>
                 <input value={pdv} onChange={promeniPdvHandler} />
             </div>
 

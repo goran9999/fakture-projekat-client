@@ -1,5 +1,14 @@
 import { StatusFakture } from "../models/faktura";
+import StavkaFakture from "../models/stavkaFakture";
 import Valuta from "../models/valuta";
+
+export function izracunajUkupnuVrednostFakture(stavke: StavkaFakture[]): number {
+    return stavke.reduce((total, s) => total + izracunajUkupnuVrednostStavke(s), 0)
+}
+
+export function izracunajUkupnuVrednostStavke(stavka: StavkaFakture): number {
+    return (stavka.proizvod.osnovnaCena + ((stavka.proizvod.osnovnaCena * stavka.proizvod.pdv) / 100)) * stavka.kolicina;
+}
 
 export function formatirajDatum(datum: Date): string {
     return `${datum.getDate()}.${datum.getMonth()}.${datum.getFullYear()}`

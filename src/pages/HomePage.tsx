@@ -3,7 +3,6 @@ import ListaFaktura from '../components/faktura/ListaFaktura'
 import Faktura, { StatusFakture } from '../models/faktura'
 import { FakturaContext } from '../store/faktura-context'
 import { Link } from 'react-router-dom'
-import styles from './HomePage.module.css'
 import Sidebar from '../UI/Sidebar'
 import Modal from '../UI/Modal'
 
@@ -82,7 +81,7 @@ const HomePage = () => {
                 </Modal>
             }
 
-            <main className={styles.main}>
+            <main style={{ display: 'flex' }}>
                 <Sidebar>
                     <ul>
                         <li><Link to='/'>Pregled</Link></li>

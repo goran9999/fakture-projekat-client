@@ -36,8 +36,6 @@ const NovaFakturaForma = () => {
     const [prikaziModalZaIzmenuStavke, setPrikaziModalZaIzmenuStavke] = useState(false)
     const [prikaziModalZaSlanjeMaila, setPrikaziModalZaSlanjeMaila] = useState(false)
 
-    // po defaultu je stavkaZaIzmenu prva stavka u nizu da se kompajler ne bi bunio, 
-    // ali klikom na izmenu neke stavke ce se promeniti ovo stanje
     const [stavkaZaIzmenu, setStavkaZaIzmenu] = useState(defaultStavkaFakture);
 
     // refs
