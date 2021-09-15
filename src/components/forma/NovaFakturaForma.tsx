@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react"
+import React, { useContext, useState } from "react"
 import { useHistory } from "react-router"
 import AdresaModel, { defaultAdresa } from "../../models/adresa"
 import Faktura, { StatusFakture } from "../../models/faktura"
@@ -30,6 +30,9 @@ const NovaFakturaForma = () => {
 
     const [valutaPlacanja, setValutaPlacanja] = useState(Valuta.DINAR)
     const [mestoIzdavanja, setMestoIzdavanja] = useState(defaultAdresa)
+    const [datumIzdavanja, setDatumIzdavanja] = useState('');
+    const [rokPlacanja, setRokPlacanja] = useState('');
+
 
     const [stavkeFakture, setStavkeFakture] = useState<StavkaFakture[]>([])
     const [prikaziModalZaUnosStavke, setPrikaziModalZaUnosStavke] = useState(false)
@@ -37,11 +40,6 @@ const NovaFakturaForma = () => {
     const [prikaziModalZaSlanjeMaila, setPrikaziModalZaSlanjeMaila] = useState(false)
 
     const [stavkaZaIzmenu, setStavkaZaIzmenu] = useState(defaultStavkaFakture);
-
-    // refs
-    const datumIzdavanjaRef = useRef<HTMLInputElement>(null);
-    const rokPlacanjaRef = useRef<HTMLInputElement>(null);
-
 
     const sacuvajFakturuHandler = async (e: React.MouseEvent<HTMLButtonElement>) => {
 
@@ -55,8 +53,8 @@ const NovaFakturaForma = () => {
             kupac: kupac,
             mestoIzdavanja: mestoIzdavanja,
             valutaPlacanja: valutaPlacanja,
-            datumIzdavanja: new Date(datumIzdavanjaRef.current!.value),
-            rokPlacanja: new Date(rokPlacanjaRef.current!.value),
+            datumIzdavanja: new Date(datumIzdavanja),
+            rokPlacanja: new Date(rokPlacanja),
             status: e.currentTarget.id === 'posalji' ? StatusFakture.POSLATA : StatusFakture.PRIPREMA,
             stavke: stavkeFakture
         }
@@ -130,11 +128,11 @@ const NovaFakturaForma = () => {
     }
 
     const promeniDatumIzdavanjaHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        datumIzdavanjaRef.current!.value = e.target.value
+        setDatumIzdavanja(e.target.value)
     }
 
     const promeniRokPlacanjaHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        rokPlacanjaRef.current!.value = e.target.value
+        setRokPlacanja(e.target.value)
     }
 
     const dodajStavku = (stavka: StavkaFakture) => {
@@ -225,12 +223,12 @@ const NovaFakturaForma = () => {
 
                 <div className={styles['form-element']}>
                     <label htmlFor='datumIzdavanja'>Datum izdavanja *</label>
-                    <input type='date' ref={datumIzdavanjaRef} onChange={promeniDatumIzdavanjaHandler} id='datumIzdavanja' />
+                    <input type='date' value={datumIzdavanja} onChange={promeniDatumIzdavanjaHandler} id='datumIzdavanja' />
                 </div>
 
                 <div className={styles['form-element']}>
                     <label htmlFor='rokPlacanja'>Rok placanja *</label>
-                    <input type='date' ref={rokPlacanjaRef} onChange={promeniRokPlacanjaHandler} />
+                    <input type='date' value={rokPlacanja} onChange={promeniRokPlacanjaHandler} />
                 </div>
 
             </div>

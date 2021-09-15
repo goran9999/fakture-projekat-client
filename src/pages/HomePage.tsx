@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react'
+import { useHistory } from 'react-router'
 import ListaFaktura from '../components/faktura/ListaFaktura'
 import Faktura, { StatusFakture } from '../models/faktura'
 import { FakturaContext } from '../store/faktura-context'
-import { Link } from 'react-router-dom'
 import Sidebar from '../UI/Sidebar'
 import Modal from '../UI/Modal'
 
@@ -16,6 +16,8 @@ enum FilterStanje {
 }
 
 const HomePage = () => {
+
+    const history = useHistory()
 
     const [fakture, setFakture] = useState<Faktura[]>([])
     const fakturaContext = useContext(FakturaContext);
@@ -38,7 +40,7 @@ const HomePage = () => {
             setFakture(fakturaContext.fakture)
         }
 
-    }, [])
+    }, [fakturaContext])
 
     const filtrirajFakture = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.value === FilterStanje.SVE) {
@@ -84,8 +86,9 @@ const HomePage = () => {
             <main style={{ display: 'flex' }}>
                 <Sidebar>
                     <ul>
-                        <li><Link to='/'>Pregled</Link></li>
-                        <li><Link to='/dodaj-fakturu'>Dodaj novu fakturu</Link></li>
+                        <li style={{ backgroundColor: '#025955' }}>Pregled</li>
+                        <li onClick={() => history.push('/dodaj-fakturu')}>Dodaj novu fakturu</li>
+                        <li>Sifarnik</li>
                         <li>Statistika</li>
                         <li>Podesavanja</li>
                         <li>Odjava</li>

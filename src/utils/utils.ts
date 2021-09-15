@@ -10,6 +10,7 @@ export function izracunajUkupnuVrednostStavke(stavka: StavkaFakture): number {
     return (stavka.proizvod.osnovnaCena + ((stavka.proizvod.osnovnaCena * stavka.proizvod.pdv) / 100)) * stavka.kolicina;
 }
 
+// mora kao argument da se prosledi new Date(datum.toString())
 export function formatirajDatum(datum: Date): string {
     return `${datum.getDate()}.${datum.getMonth()}.${datum.getFullYear()}`
 }
