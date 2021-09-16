@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Faktura, { StatusFakture } from "../../models/faktura";
 import StavkaFakture from "../../models/stavkaFakture";
 import { formatirajCenu, formatirajDatum, kapitalizujPrvoSlovo } from "../../utils/utils";
@@ -14,8 +13,6 @@ const DetaljnaFaktura = (props: Props) => {
     const izmeniStavku = () => { }
 
     const ukloniStavku = () => { }
-
-    const [ukupanIznos, setUkupanIznos] = useState(0);
 
     const izracunajUkupanIznos = (stavkeFakture: StavkaFakture[]) => {
         let zbir = 0;

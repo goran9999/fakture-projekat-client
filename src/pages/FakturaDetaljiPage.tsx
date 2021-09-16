@@ -13,8 +13,9 @@ const FakturaDetaljiPage = () => {
 
     useEffect(() => {
         const faktura = fakturaContext.fakture.find(f => f.broj === brojFakture)
-
+        console.log(faktura)
         if (!faktura) {
+            
             fetch(`http://localhost:5000/api/fakture/${brojFakture}`)
                 .then(res => res.json())
                 .then(data => {

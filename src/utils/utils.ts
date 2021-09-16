@@ -27,6 +27,10 @@ export function kapitalizujPrvoSlovo(s: string): string {
     return s.charAt(0).toUpperCase() + s.substr(1);
 }
 
+export function daLiJeCifra(s:string):boolean {
+    return +s>=0 && +s<9;
+}
+
 export function vratiCssKlasuStatusaFakture(status: StatusFakture): string {
     switch (status) {
         case StatusFakture.PLACENA: return 'status-placena';

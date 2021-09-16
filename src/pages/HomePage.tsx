@@ -39,7 +39,7 @@ const HomePage = () => {
             setFakture(fakturaContext.fakture)
         }
 
-    }, [])
+    },[fakturaContext])
 
     const filtrirajFakture = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.value === FilterStanje.SVE) {

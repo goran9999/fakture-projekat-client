@@ -1,40 +1,68 @@
 import React, { useState } from 'react'
 import StavkaFakture from '../../models/stavkaFakture'
 import Proizvod, { TipProizvoda } from '../../models/proizvod'
-
 import styles from './NovaFakturaForma.module.css'
-
+import useValidation from '../hooks/use-validation'
+import useValidationNumber from '../hooks/use-validation-number'
 interface Props {
     onSacuvajStavku: (stavka: StavkaFakture) => void
     onOdustaniOdUnosa: () => void
 }
 
-const DodavanjeStavke = (props: Props) => {
+    const DodavanjeStavke = (props: Props) => {
 
-    const [sifra, setSifra] = useState('');
-    const [naziv, setNaziv] = useState('');
-    const [tip, setTip] = useState(TipProizvoda.PROIZVOD)
-    const [osnovnaCena, setOsnovnaCena] = useState(0);
-    const [pdv, setPdv] = useState(0);
-    const [kolicina, setKolicina] = useState(1);
+    let formaValidna = false;
+    const [tip, setTip] = useState(TipProizvoda.PROIZVOD);
+    
+    
+    const {upisanaVrednost:sifra,imaGreske:sifraPogresna,vrednostValidna:sifraValidna,vrednostPromenjena:promeniSifru,
+        fokusUklonjen:sifrafokusUklonjen,reset:resetSifra}
+        = useValidation(value=>{
+            return  value.trim().length!==0});
+    
+    const {upisanaVrednost:naziv,imaGreske:nazivPogresan,vrednostValidna:nazivValidan,vrednostPromenjena:promeniNaziv,
+        fokusUklonjen:nazivFokusUklonjen,reset:resetNaziv}
+     = useValidation(value=>{
+         return  value.trim().length!==0});
+    
+    const {upisanaVrednost:osnovnaCena,imaGreske:cenaPogresna,vrednostValidna:cenaValidna,vrednostPromenjena:promeniCenu,
+        fokusUklonjen:cenaFokusUklonjen,reset:resetCenu}
+     = useValidationNumber(value=>{
+         return  value>=0 && value.toString().trim().length!==0 && !isNaN(value)},0);
 
+    const {upisanaVrednost:kolicina,imaGreske:kolicinaPogresna,vrednostValidna:kolicinaValidna,vrednostPromenjena:promeniKolicinu,
+        fokusUklonjen:kolicinaFokusUklonjen,reset:resetKolicinu}
+     = useValidationNumber(value=>{
+          return  value>=1 && value.toString().trim().length!==0 && !isNaN(value)},1);
+
+    const {upisanaVrednost:pdv,imaGreske:pdvPogresan,vrednostValidna:pdvValidan,vrednostPromenjena:promeniPdv,
+        fokusUklonjen:pdvFokusUklonjen,reset:resetPdv}
+     = useValidationNumber(value=>{
+          return  value>=1 && value<=100 && value.toString().trim().length!==0 && !isNaN(value)},0);
+
+    if(sifraValidna && nazivValidan && cenaValidna && kolicinaValidna && pdvValidan){
+        formaValidna=true;
+    }
     const sacuvajStavkuHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
+       
+      
         const proizvod: Proizvod = {
             sifra: sifra,
             naziv: naziv,
             tip: tip,
-            osnovnaCena: osnovnaCena,
+            osnovnaCena: +osnovnaCena,
             pdv: pdv
         };
+    
 
         const stavka: StavkaFakture = {
             proizvod: proizvod,
             kolicina: kolicina
         }
 
-        props.onSacuvajStavku(stavka)
+        props.onSacuvajStavku(stavka);
         resetujStavku()
-    }
+}
 
     const odustaniOdUnosaHandler = () => {
         resetujStavku()
@@ -42,28 +70,38 @@ const DodavanjeStavke = (props: Props) => {
     }
 
     const resetujStavku = () => {
-        setSifra('');
-        setNaziv('');
-        setKolicina(1);
+       
+        resetSifra();
+        resetNaziv();
+        resetKolicinu();
         setTip(TipProizvoda.PROIZVOD)
-        setOsnovnaCena(0);
-        setPdv(0);
+        resetCenu();
+        resetPdv();
     }
 
     const promeniSifruHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSifra(e.target.value)
+        // setSifra(e.target.value)
+        promeniSifru(e.target.value);
+
     }
 
     const promeniNazivHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setNaziv(e.target.value)
+        promeniNaziv(e.target.value);
     }
 
     const promeniOsnovnuCenuHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setOsnovnaCena(+e.target.value)
+        const broj = +e.target.value.charAt(e.target.value.length-1);
+            if(!isNaN(broj)){
+        promeniCenu(+e.target.value);
+        }
     }
 
     const promeniPdvHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setPdv(+e.target.value)
+
+        const broj = +e.target.value.charAt(e.target.value.length-1);
+            if(!isNaN(broj)){
+        promeniPdv(+e.target.value);
+            }
     }
 
     const promeniTipHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -71,19 +109,24 @@ const DodavanjeStavke = (props: Props) => {
     }
 
     const promeniKolicinuHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setKolicina(+e.target.value)
+        const broj = +e.target.value.charAt(e.target.value.length-1);
+            if(!isNaN(broj)){
+        promeniKolicinu(+e.target.value)
+        }
     }
 
     return (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)' }}>
             <div className={styles['form-element']}>
                 <label>Sifra *</label>
-                <input value={sifra} onChange={promeniSifruHandler} />
+                <input  onBlur={sifrafokusUklonjen} value={sifra} onChange={promeniSifruHandler} />
+                {(sifraPogresna)&& <p style={{color:'red',marginTop:'10px'}}>Sifra stavke je obavezna!</p>}
             </div>
 
             <div className={styles['form-element']}>
                 <label>Naziv *</label>
-                <input value={naziv} onChange={promeniNazivHandler} />
+                <input onBlur={nazivFokusUklonjen} value={naziv} onChange={promeniNazivHandler} />
+                {(nazivPogresan)&&<p style={{color:'red',marginTop:'10px'}}>Naziv stavke je obavezan!</p>}
             </div>
 
 
@@ -97,21 +140,24 @@ const DodavanjeStavke = (props: Props) => {
 
             <div className={styles['form-element']}>
                 <label>Kolicina *</label>
-                <input value={kolicina} onChange={promeniKolicinuHandler} />
+                <input onBlur={kolicinaFokusUklonjen} value={kolicina} onChange={promeniKolicinuHandler} />
+                {(kolicinaPogresna)&& <p style={{color:'red',marginTop:'10px'}}>Kolicina ne moze biti negativna!</p>}
             </div>
 
             <div className={styles['form-element']}>
                 <label htmlFor="">Osnovna cena *</label>
-                <input value={osnovnaCena} onChange={promeniOsnovnuCenuHandler} />
+                <input value={osnovnaCena} onBlur={cenaFokusUklonjen} onChange={promeniOsnovnuCenuHandler} />
+                {(cenaPogresna)&& <p style={{color:'red',marginTop:'10px'}}>Cena ne moze biti negativna!</p>}
             </div>
 
             <div className={styles['form-element']}>
                 <label htmlFor="">PDV *</label>
-                <input value={pdv} onChange={promeniPdvHandler} />
+                <input value={pdv} onBlur={pdvFokusUklonjen} onChange={promeniPdvHandler} />
+                {(pdvPogresan)&& <p style={{color:'red',marginTop:'10px'}}>Pdv ne moze biti manji od 0% i veci od 100%!</p>}
             </div>
 
             <div>
-                <button className={styles['btn-sacuvaj-stavku']} onClick={sacuvajStavkuHandler}>Sacuvaj stavku</button>
+                <button disabled={!formaValidna} className={styles['btn-sacuvaj-stavku']} onClick={sacuvajStavkuHandler}>Sacuvaj stavku</button>
                 <button className={styles['btn-odbaci-stavku']} onClick={odustaniOdUnosaHandler}>Odustani</button>
             </div>
         </div>
