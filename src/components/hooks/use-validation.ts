@@ -1,4 +1,4 @@
-import  { useEffect, useState } from "react";
+import  { useState } from "react";
 const useValidation = (validacionaFunkcija : (vrednost:string) => boolean,initialState?:boolean) =>{
 
 

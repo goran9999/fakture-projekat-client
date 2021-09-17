@@ -6,8 +6,9 @@ import styles from './NovaFakturaForma.module.css'
 
 
 interface Props {
+    obaveznaPolja: boolean,
     onChange: (izmenjenaAdresa: AdresaModel) => void,
-    obaveznaPolja: boolean
+    
 }
 
 
@@ -35,8 +36,7 @@ const Adresa = (props: Props) => {
         = useValidation(value=>value.trim().length!==0);
 
 
-
-    
+   
 
     const promeniAdresuHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         const nazivPolja = e.target.name;

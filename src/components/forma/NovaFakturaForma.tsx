@@ -12,14 +12,14 @@ import useValidation from '../hooks/use-validation'
 import styles from './NovaFakturaForma.module.css'
 import Modal from "../../UI/Modal"
 import IzmenaDodateStavke from "./IzmenaDodateStavke"
-import { vratiSkraceniNazivValute,daLiJeCifra } from "../../utils/utils"
+import { vratiSkraceniNazivValute} from "../../utils/utils"
 
 
 const NovaFakturaForma = () => {
 
     const history = useHistory()
 
-    const [brojFakture, setBrojFakture] = useState('');
+    const brojFakture = useState('')[0];
 
     const [izdavac, setIzdavac] = useState(defaultKomitent)
 
@@ -87,10 +87,11 @@ const NovaFakturaForma = () => {
     // ali klikom na izmenu neke stavke ce se promeniti ovo stanje
     const [stavkaZaIzmenu, setStavkaZaIzmenu] = useState(defaultStavkaFakture);
 
+    //stateovi za validaciju
+    const [datumIzdavanjaUpisan,setDatumIzdavanjaUpisan] = useState(false);
+   
     // refs
     const datumIzdavanjaRef = useRef<HTMLInputElement>(null);
-    const rokPlacanjaRef = useRef<HTMLInputElement>(null);
-    const [datumIzdavanjaUpisan,setDatumIzdavanjaUpisan] = useState(false);
 
     
 
@@ -103,7 +104,7 @@ const NovaFakturaForma = () => {
 
      const {upisanaVrednost:rok,imaGreske:rokPogresan,vrednostValidna:rokValidan,
         vrednostPromenjena:promeniRokPlacanja,fokusUklonjen:onBlurRokPlacanja}=
-        useValidation(value => new Date <= new Date(value) && new Date(value) >= new Date(datumIzdavanjaRef.current!.value));
+        useValidation(value => new Date() <= new Date(value) && new Date(value) >= new Date(datumIzdavanjaRef.current!.value));
 
 
     const sacuvajFakturuHandler = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -119,7 +120,6 @@ const NovaFakturaForma = () => {
             mestoIzdavanja: mestoIzdavanja,
             valutaPlacanja: valutaPlacanja,
             datumIzdavanja: new Date(datumIzdavanjaRef.current!.value),
-            //rokPlacanja: new Date(rokPlacanjaRef.current!.value),
             rokPlacanja: new Date(rok),
             status: e.currentTarget.id === 'posalji' ? StatusFakture.POSLATA : StatusFakture.PRIPREMA,
             stavke: stavkeFakture
@@ -269,8 +269,10 @@ const NovaFakturaForma = () => {
         setStavkaZaIzmenu(defaultStavkaFakture)
     }
 
+   
+
     if(nazivValidan && nazivKupcaValidan && maticniBrojValidan && maticniBrojKupcaValidan && emailValidan && emailKupcaValidan
-        &&pibValidan && pibKupcaValidan && telefonValidan && telefonKupcaValidan && rokValidan && broj){
+        &&pibValidan && pibKupcaValidan && telefonValidan && telefonKupcaValidan && rokValidan && brojValidan){
             formaValidna=true;
         }
    
@@ -307,7 +309,7 @@ const NovaFakturaForma = () => {
                     {telefonPogresan && <p style={{color:'red',marginTop:'10px'}}>Broj telefona nije validan!</p>}
                 </div>
 
-                <Adresa onChange={promeniAdresuIzdavacaHandler} obaveznaPolja={true} />
+                <Adresa  onChange={promeniAdresuIzdavacaHandler} obaveznaPolja={true} />
 
             </div>
 
@@ -345,7 +347,7 @@ const NovaFakturaForma = () => {
 
             <h2>Mesto izdavanja</h2>
             <div className={styles['mesto-izdavanja-wrapper']}>
-                <Adresa onChange={promeniMestoIzdavanjaHandler} obaveznaPolja={false} />
+                <Adresa onChange={promeniMestoIzdavanjaHandler}  obaveznaPolja={false} />
             </div>
 
 
