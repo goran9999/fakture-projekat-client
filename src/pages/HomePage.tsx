@@ -39,7 +39,7 @@ const HomePage = () => {
             setFakture(fakturaContext.fakture)
         }
 
-    },[fakturaContext])
+    }, [])
 
     const filtrirajFakture = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.value === FilterStanje.SVE) {
@@ -48,7 +48,7 @@ const HomePage = () => {
         } else {
             const status = event.target.value as StatusFakture;
             setFakture(fakturaContext.fakture.filter(f => f.status === status));
-            setPrimenjenFilter(event.currentTarget.value as FilterStanje)
+            setPrimenjenFilter(event.target.value as FilterStanje)
         }
         setPrikaziModalZaFiltriranje(false);
     }
