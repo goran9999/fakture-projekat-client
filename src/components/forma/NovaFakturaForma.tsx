@@ -8,7 +8,7 @@ import Adresa from "./Adresa"
 import DodataStavkaItem from "./DodataStavkaItem"
 import DodavanjeStavke from "./DodavanjeStavke"
 import Komitent, { defaultKomitent } from "../../models/komitent"
-
+import useValidation from '../hooks/use-validation'
 import styles from './NovaFakturaForma.module.css'
 import Modal from "../../UI/Modal"
 import IzmenaDodateStavke from "./IzmenaDodateStavke"
@@ -21,7 +21,7 @@ const NovaFakturaForma = () => {
     const history = useHistory()
     const fakturaContext = useContext(FakturaContext);
 
-    const [brojFakture, setBrojFakture] = useState('');
+    const brojFakture = useState('')[0];
 
     const [izdavac, setIzdavac] = useState(defaultKomitent)
 
@@ -36,13 +36,78 @@ const NovaFakturaForma = () => {
     const [prikaziModalZaIzmenuStavke, setPrikaziModalZaIzmenuStavke] = useState(false)
     const [prikaziModalZaSlanjeMaila, setPrikaziModalZaSlanjeMaila] = useState(false)
 
+    let formaValidna = false;
+
+    //Validacija izdavaca
+
+    const { upisanaVrednost: pib, imaGreske: pibPogresan, vrednostValidna: pibValidan,
+        vrednostPromenjena: promeniPib, fokusUklonjen: onBlurPib } =
+        useValidation(value => value.trim().length !== 0);
+
+    const { upisanaVrednost: maticniBroj, imaGreske: maticniBrojPogresan, vrednostValidna: maticniBrojValidan,
+        vrednostPromenjena: promeniMaticniBroj, fokusUklonjen: onBlurMaticniBroj } =
+        useValidation(value => value.trim().length !== 0);
+
+    const { upisanaVrednost: naziv, imaGreske: nazivPogresan, vrednostValidna: nazivValidan,
+        vrednostPromenjena: promeniNaziv, fokusUklonjen: onBlurNaziv } =
+        useValidation(value => value.trim().length !== 0);
+
+    const { upisanaVrednost: email, imaGreske: emailPogresan, vrednostValidna: emailValidan,
+        vrednostPromenjena: promeniEmail, fokusUklonjen: onBlurEmail } =
+        useValidation(value => value.trim().length !== 0 && value.includes('@') && value.endsWith('.com'));
+
+    const { upisanaVrednost: telefon, imaGreske: telefonPogresan, vrednostValidna: telefonValidan,
+        vrednostPromenjena: promeniTelefon, fokusUklonjen: onBlurTelefon } =
+        useValidation(value => value.trim().length !== 0 && value.startsWith('+'));
+
+    //Validacija kupca
+
+    const { upisanaVrednost: pibKupca, imaGreske: pibKupcaPogresan, vrednostValidna: pibKupcaValidan,
+        vrednostPromenjena: promeniPibKupca, fokusUklonjen: onBlurPibKupca } =
+        useValidation(value => value.trim().length !== 0);
+
+    const { upisanaVrednost: maticniBrojKupca, imaGreske: maticniBrojKupcaKupcaPogresan, vrednostValidna: maticniBrojKupcaValidan,
+        vrednostPromenjena: promeniMaticniBrojKupca, fokusUklonjen: onBlurMaticniBrojKupca } =
+        useValidation(value => value.trim().length !== 0);
+
+    const { upisanaVrednost: nazivKupca, imaGreske: nazivKupcaPogresan, vrednostValidna: nazivKupcaValidan,
+        vrednostPromenjena: promeniNazivKupca, fokusUklonjen: onBlurNazivKupca } =
+        useValidation(value => value.trim().length !== 0);
+
+    const { upisanaVrednost: emailKupca, imaGreske: emailKupcaPogresan, vrednostValidna: emailKupcaValidan,
+        vrednostPromenjena: promeniEmailKupca, fokusUklonjen: onBlurEmailKupca } =
+        useValidation(value => value.trim().length !== 0 && value.includes('@') && value.endsWith('.com'));
+
+    const { upisanaVrednost: telefonKupca, imaGreske: telefonKupcaPogresan, vrednostValidna: telefonKupcaValidan,
+        vrednostPromenjena: promeniTelefonKupca, fokusUklonjen: onBlurTelefonKupca } =
+        useValidation(value => value.trim().length !== 0 && value.startsWith('+'));
+
+
+
+
     // po defaultu je stavkaZaIzmenu prva stavka u nizu da se kompajler ne bi bunio, 
     // ali klikom na izmenu neke stavke ce se promeniti ovo stanje
     const [stavkaZaIzmenu, setStavkaZaIzmenu] = useState(defaultStavkaFakture);
 
+    //stateovi za validaciju
+    const [datumIzdavanjaUpisan, setDatumIzdavanjaUpisan] = useState(false);
+
     // refs
     const datumIzdavanjaRef = useRef<HTMLInputElement>(null);
-    const rokPlacanjaRef = useRef<HTMLInputElement>(null);
+
+
+
+
+    //Validacija opstih informacija
+
+    const { upisanaVrednost: broj, imaGreske: brojPogresan, vrednostValidna: brojValidan,
+        vrednostPromenjena: promeniBroj, fokusUklonjen: onBlurBroj } =
+        useValidation(value => value.trim().length !== 0);
+
+    const { upisanaVrednost: rok, imaGreske: rokPogresan, vrednostValidna: rokValidan,
+        vrednostPromenjena: promeniRokPlacanja, fokusUklonjen: onBlurRokPlacanja } =
+        useValidation(value => new Date() <= new Date(value) && new Date(value) >= new Date(datumIzdavanjaRef.current!.value));
+
 
 
     const sacuvajFakturuHandler = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -58,7 +123,7 @@ const NovaFakturaForma = () => {
             mestoIzdavanja: mestoIzdavanja,
             valutaPlacanja: valutaPlacanja,
             datumIzdavanja: new Date(datumIzdavanjaRef.current!.value),
-            rokPlacanja: new Date(rokPlacanjaRef.current!.value),
+            rokPlacanja: new Date(rok),
             status: e.currentTarget.id === 'posalji' ? StatusFakture.POSLATA : StatusFakture.PRIPREMA,
             stavke: stavkeFakture
         }
@@ -86,7 +151,22 @@ const NovaFakturaForma = () => {
     }
 
     const promeniIzdavacaHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const imePolja = e.target.name
+        const imePolja = e.target.name;
+        if (imePolja === 'maticniBroj') {
+            promeniMaticniBroj(e.target.value);
+        }
+        if (imePolja === 'pib') {
+            promeniPib(e.target.value);
+        }
+        if (imePolja === 'naziv') {
+            promeniNaziv(e.target.value);
+        }
+        if (imePolja === 'email') {
+            promeniEmail(e.target.value);
+        }
+        if (imePolja === 'telefon') {
+            promeniTelefon(e.target.value)
+        }
         const izmenjenIzdavac: Komitent = {
             ...izdavac,
             [imePolja]: e.target.value
@@ -104,6 +184,21 @@ const NovaFakturaForma = () => {
 
     const promeniKupcaHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         const imePolja = e.target.name
+        if (imePolja === 'maticniBroj') {
+            promeniMaticniBrojKupca(e.target.value);
+        }
+        if (imePolja === 'pib') {
+            promeniPibKupca(e.target.value);
+        }
+        if (imePolja === 'naziv') {
+            promeniNazivKupca(e.target.value);
+        }
+        if (imePolja === 'email') {
+            promeniEmailKupca(e.target.value);
+        }
+        if (imePolja === 'telefon') {
+            promeniTelefonKupca(e.target.value);
+        }
         const izmenjenKupac: Komitent = {
             ...kupac,
             [imePolja]: e.target.value
@@ -120,7 +215,7 @@ const NovaFakturaForma = () => {
     }
 
     const promeniBrojFaktureHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setBrojFakture(e.target.value)
+        promeniBroj(e.target.value);
     }
 
     const promeniMestoIzdavanjaHandler = (mesto: AdresaModel) => {
@@ -133,10 +228,12 @@ const NovaFakturaForma = () => {
 
     const promeniDatumIzdavanjaHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         datumIzdavanjaRef.current!.value = e.target.value
+        setDatumIzdavanjaUpisan(true);
     }
 
     const promeniRokPlacanjaHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        rokPlacanjaRef.current!.value = e.target.value
+        //rokPlacanjaRef.current!.value = e.target.value
+        promeniRokPlacanja(e.target.value);
     }
 
     const dodajStavku = (stavka: StavkaFakture) => {
@@ -176,6 +273,14 @@ const NovaFakturaForma = () => {
         setStavkaZaIzmenu(defaultStavkaFakture)
     }
 
+
+
+    if (nazivValidan && nazivKupcaValidan && maticniBrojValidan && maticniBrojKupcaValidan && emailValidan && emailKupcaValidan
+        && pibValidan && pibKupcaValidan && telefonValidan && telefonKupcaValidan && rokValidan && brojValidan) {
+        formaValidna = true;
+    }
+
+
     return (
         <form className={styles.forma}>
 
@@ -184,23 +289,28 @@ const NovaFakturaForma = () => {
 
                 <div className={styles['form-element']}>
                     <label htmlFor='maticniBrojIzdavaca'>Maticni broj *</label>
-                    <input value={izdavac.maticniBroj} onChange={promeniIzdavacaHandler} id='maticniBrojIzdavaca' name='maticniBroj' />
+                    <input onBlur={onBlurMaticniBroj} value={maticniBroj} onChange={promeniIzdavacaHandler} id='maticniBrojIzdavaca' name='maticniBroj' />
+                    {maticniBrojPogresan && <p style={{ color: 'red', marginTop: '10px' }}>Maticni broj ne moze biti prazan!</p>}
                 </div>
                 <div className={styles['form-element']}>
                     <label htmlFor='pibIzdavaca'>PIB *</label>
-                    <input value={izdavac.pib} onChange={promeniIzdavacaHandler} id='pibIzdavaca' name='pib' />
+                    <input value={pib} onBlur={onBlurPib} onChange={promeniIzdavacaHandler} id='pibIzdavaca' name='pib' />
+                    {pibPogresan && <p style={{ color: 'red', marginTop: '10px' }}>Pib ne moze biti prazan!</p>}
                 </div>
                 <div className={styles['form-element']}>
                     <label htmlFor='nazivIzdavaca'>Naziv *</label>
-                    <input value={izdavac.naziv} onChange={promeniIzdavacaHandler} id='nazivIzdavaca' name='naziv' />
+                    <input onBlur={onBlurNaziv} value={naziv} onChange={promeniIzdavacaHandler} id='nazivIzdavaca' name='naziv' />
+                    {nazivPogresan && <p style={{ color: 'red', marginTop: '10px' }}>Naziv ne moze biti prazan!</p>}
                 </div>
                 <div className={styles['form-element']}>
                     <label htmlFor='emailIzdavaca'>E-mail *</label>
-                    <input value={izdavac.email} onChange={promeniIzdavacaHandler} id='emailIzdavaca' name='email' />
+                    <input onBlur={onBlurEmail} value={email} onChange={promeniIzdavacaHandler} id='emailIzdavaca' name='email' />
+                    {emailPogresan && <p style={{ color: 'red', marginTop: '10px' }}>Email nije validan!</p>}
                 </div>
                 <div className={styles['form-element']}>
                     <label htmlFor='telefonIzdavaca'>Telefon *</label>
-                    <input value={izdavac.telefon} onChange={promeniIzdavacaHandler} id='telefonIzdavaca' name='telefon' />
+                    <input onBlur={onBlurTelefon} value={telefon} onChange={promeniIzdavacaHandler} id='telefonIzdavaca' name='telefon' />
+                    {telefonPogresan && <p style={{ color: 'red', marginTop: '10px' }}>Broj telefona nije validan!</p>}
                 </div>
 
                 <Adresa onChange={promeniAdresuIzdavacaHandler} obaveznaPolja={true} />
@@ -210,10 +320,10 @@ const NovaFakturaForma = () => {
 
             <h2>Opste informacije</h2>
             <div className={styles['info-wrapper']}>
-
                 <div className={styles['form-element']}>
                     <label htmlFor={brojFakture}>Broj fakture *</label>
-                    <input id='brojFakture' value={brojFakture} onChange={promeniBrojFaktureHandler} />
+                    <input id='brojFakture' onBlur={onBlurBroj} value={broj} onChange={promeniBrojFaktureHandler} />
+                    {brojPogresan && <p style={{ color: 'red', marginTop: '10px' }}>Broj fakture nije validan!</p>}
                 </div>
 
                 <div className={styles['form-element']}>
@@ -228,11 +338,13 @@ const NovaFakturaForma = () => {
                 <div className={styles['form-element']}>
                     <label htmlFor='datumIzdavanja'>Datum izdavanja *</label>
                     <input type='date' ref={datumIzdavanjaRef} onChange={promeniDatumIzdavanjaHandler} id='datumIzdavanja' />
+
                 </div>
 
                 <div className={styles['form-element']}>
                     <label htmlFor='rokPlacanja'>Rok placanja *</label>
-                    <input type='date' ref={rokPlacanjaRef} onChange={promeniRokPlacanjaHandler} />
+                    <input type='date' disabled={!datumIzdavanjaUpisan} onBlur={onBlurRokPlacanja} value={rok} onChange={promeniRokPlacanjaHandler} />
+                    {rokPogresan && <p style={{ color: 'red' }}>Rok nije validan!</p>}
                 </div>
 
             </div>
@@ -261,27 +373,32 @@ const NovaFakturaForma = () => {
 
                 <div className={styles['form-element']}>
                     <label htmlFor='maticniBrojKupca'>Maticni broj *</label>
-                    <input value={kupac.maticniBroj} onChange={promeniKupcaHandler} id='maticniBrojKupca' name='maticniBroj' />
+                    <input onBlur={onBlurMaticniBrojKupca} value={maticniBrojKupca} onChange={promeniKupcaHandler} id='maticniBrojKupca' name='maticniBroj' />
+                    {maticniBrojKupcaKupcaPogresan && <p style={{ color: 'red', marginTop: '10px' }}>Maticni broj je obavezan!</p>}
                 </div>
 
                 <div className={styles['form-element']}>
                     <label htmlFor='pibKupca' style={{ color: !pravnoLice ? '#DEDEDE' : '' }}>PIB *</label>
-                    <input disabled={!pravnoLice} value={kupac.pib} onChange={promeniKupcaHandler} id='pibKupca' name='pib' />
+                    <input onBlur={onBlurPibKupca} disabled={!pravnoLice} value={pibKupca} onChange={promeniKupcaHandler} id='pibKupca' name='pib' />
+                    {pravnoLice && pibKupcaPogresan && <p style={{ color: 'red', marginTop: '10px' }}>PIB je obavezan!</p>}
                 </div>
 
                 <div className={styles['form-element']}>
                     <label htmlFor='nazivKupca'>{pravnoLice ? 'Naziv' : 'Ime i prezime'} *</label>
-                    <input value={kupac.naziv} onChange={promeniKupcaHandler} id='nazivKupca' name='naziv' />
+                    <input onBlur={onBlurNazivKupca} value={nazivKupca} onChange={promeniKupcaHandler} id='nazivKupca' name='naziv' />
+                    {nazivKupcaPogresan && <p style={{ color: 'red', marginTop: '10px' }}>Naziv je obavezan!</p>}
                 </div>
 
                 <div className={styles['form-element']}>
                     <label htmlFor='emailKupca'>E-mail *</label>
-                    <input value={kupac.email} onChange={promeniKupcaHandler} id='emailKupca' name='email' />
+                    <input onBlur={onBlurEmailKupca} value={emailKupca} onChange={promeniKupcaHandler} id='emailKupca' name='email' />
+                    {emailKupcaPogresan && <p style={{ color: 'red', marginTop: '10px' }}>E-mail je obavezan!</p>}
                 </div>
 
                 <div className={styles['form-element']}>
                     <label htmlFor='telefonKupca'>Telefon *</label>
-                    <input value={kupac.telefon} onChange={promeniKupcaHandler} id='telefonKupca' name='telefon' />
+                    <input onBlur={onBlurTelefonKupca} value={telefonKupca} onChange={promeniKupcaHandler} id='telefonKupca' name='telefon' />
+                    {telefonKupcaPogresan && <p style={{ color: 'red', marginTop: '10px' }}>Broj telefona je obavezan!</p>}
                 </div>
 
                 <Adresa onChange={promeniAdresuKupcaHandler} obaveznaPolja={true} />
@@ -353,7 +470,7 @@ const NovaFakturaForma = () => {
             }
 
             <div className={styles['potvrdi-formu-wrapper']}>
-                <button onClick={() => setPrikaziModalZaSlanjeMaila(true)} type='button'>Sacuvaj fakturu</button>
+                <button disabled={!formaValidna} onClick={() => { setPrikaziModalZaSlanjeMaila(true) }} type='button'>Sacuvaj fakturu</button>
             </div>
 
         </form>

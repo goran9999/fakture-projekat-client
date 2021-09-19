@@ -7,6 +7,9 @@
 .stavka-forma > input {
     margin-right: 20px;
 }
+.input-element-invalid {
+    background-color: salmon;
+}
 .stavka-forma > select {
     margin-right: 38px;
 }
