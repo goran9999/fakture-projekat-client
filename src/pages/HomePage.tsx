@@ -88,7 +88,7 @@ const HomePage = () => {
                     <ul>
                         <li style={{ backgroundColor: '#025955' }}>Pregled</li>
                         <li onClick={() => history.push('/dodaj-fakturu')}>Dodaj novu fakturu</li>
-                        <li>Sifarnik</li>
+                        <li onClick={() => history.push('/sifarnik')}>Sifarnik</li>
                         <li>Statistika</li>
                         <li>Podesavanja</li>
                         <li>Odjava</li>
