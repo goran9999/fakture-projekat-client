@@ -1,5 +1,5 @@
 import React from 'react'
-import NovaFakturaForma from '../components/forma/NovaFakturaForma'
+import NovaFakturaForma from '../components/forme/novaFaktura/NovaFakturaForma'
 
 const NovaFakturaPage = () => {
     return (

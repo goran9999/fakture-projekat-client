@@ -1,4 +1,4 @@
-import DodajKupcaForma from "../components/forma/DodajKupcaForma"
+import DodajKupcaForma from "../components/forme/dodajKupca/DodajKupcaForma"
 
 const DodajKupcaPage = () => {
     return (

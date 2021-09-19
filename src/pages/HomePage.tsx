@@ -1,10 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { useHistory } from 'react-router'
-import ListaFaktura from '../components/faktura/ListaFaktura'
+import ListaFaktura from '../components/fakture/listaFaktura/ListaFaktura'
 import Faktura, { StatusFakture } from '../models/faktura'
 import { FakturaContext } from '../store/faktura-context'
-import Sidebar from '../UI/Sidebar'
-import Modal from '../UI/Modal'
+import Modal from '../UI/Modal/Modal'
 
 enum FilterStanje {
     SVE = 'sve',
@@ -16,8 +14,6 @@ enum FilterStanje {
 }
 
 const HomePage = () => {
-
-    const history = useHistory()
 
     const [fakture, setFakture] = useState<Faktura[]>([])
     const fakturaContext = useContext(FakturaContext);
@@ -34,7 +30,6 @@ const HomePage = () => {
                     const fakture = data as Faktura[]
                     fakturaContext.postaviFakture(fakture);
                     setFakture(fakture)
-                    console.log('Podaci pokupljeni iz baze')
                 });
         } else {
             setFakture(fakturaContext.fakture)
@@ -60,43 +55,59 @@ const HomePage = () => {
 
     return (
         <>
-
             {prikaziModalZaFiltriranje &&
                 <Modal onZatvori={() => setPrikaziModalZaFiltriranje(false)}>
                     <div>
                         <div>
                             <h3 style={{ marginBottom: '0.5rem' }}>Prema statusu</h3>
                             <label>Sve</label>
-                            <input onChange={filtrirajFakture} type='radio' name='status' value={FilterStanje.SVE} checked={primenjenFilter === FilterStanje.SVE} />
+                            <input
+                                type='radio'
+                                value={FilterStanje.SVE}
+                                onChange={filtrirajFakture}
+                                checked={primenjenFilter === FilterStanje.SVE}
+                            />
                             <label>Priprema</label>
-                            <input onChange={filtrirajFakture} type='radio' name='status' value={FilterStanje.PRIPREMA} checked={primenjenFilter === FilterStanje.PRIPREMA} />
+                            <input
+                                type='radio'
+                                value={FilterStanje.PRIPREMA}
+                                onChange={filtrirajFakture}
+                                checked={primenjenFilter === FilterStanje.PRIPREMA}
+                            />
                             <label>Poslata</label>
-                            <input onChange={filtrirajFakture} type='radio' name='status' value={FilterStanje.POSLATA} checked={primenjenFilter === FilterStanje.POSLATA} />
+                            <input
+                                onChange={filtrirajFakture}
+                                type='radio'
+                                value={FilterStanje.POSLATA}
+                                checked={primenjenFilter === FilterStanje.POSLATA}
+                            />
                             <label>Placena</label>
-                            <input onChange={filtrirajFakture} type='radio' name='status' value={FilterStanje.PLACENA} checked={primenjenFilter === FilterStanje.PLACENA} />
+                            <input
+                                type='radio'
+                                value={FilterStanje.PLACENA}
+                                onChange={filtrirajFakture}
+                                checked={primenjenFilter === FilterStanje.PLACENA}
+                            />
                             <label>Kasni</label>
-                            <input onChange={filtrirajFakture} type='radio' name='status' value={FilterStanje.KASNI} checked={primenjenFilter === FilterStanje.KASNI} />
+                            <input
+                                type='radio'
+                                value={FilterStanje.KASNI}
+                                onChange={filtrirajFakture}
+                                checked={primenjenFilter === FilterStanje.KASNI}
+                            />
                             <label>Stornirana</label>
-                            <input onChange={filtrirajFakture} type='radio' name='status' value={FilterStanje.STORNIRANA} checked={primenjenFilter === FilterStanje.STORNIRANA} />
+                            <input
+                                type='radio'
+                                value={FilterStanje.STORNIRANA}
+                                onChange={filtrirajFakture}
+                                checked={primenjenFilter === FilterStanje.STORNIRANA}
+                            />
                         </div>
                     </div>
                 </Modal>
             }
 
-            <main style={{ display: 'flex' }}>
-                <Sidebar>
-                    <ul>
-                        <li style={{ backgroundColor: '#025955' }}>Pregled</li>
-                        <li onClick={() => history.push('/dodaj-fakturu')}>Dodaj novu fakturu</li>
-                        <li onClick={() => history.push('/sifarnik')}>Sifarnik</li>
-                        <li>Statistika</li>
-                        <li>Podesavanja</li>
-                        <li>Odjava</li>
-                    </ul>
-                </Sidebar>
-                <ListaFaktura onOmoguciFiltriranje={omoguciFiltriranje} fakture={fakture} />
-            </main>
-
+            <ListaFaktura onOmoguciFiltriranje={omoguciFiltriranje} fakture={fakture} />
         </>
     )
 }

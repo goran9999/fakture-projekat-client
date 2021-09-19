@@ -24,31 +24,6 @@
      background-color: #F7F6F2;
 }
 
-.forma {
-    padding: 2rem;
-}
-
-.form-element {
-    margin-bottom: 20px;
-}
-
-.form-element > input:disabled {
-    background-color: #DEDEDE;
-    opacity: 0.3;
-}
-
-.form-element > input {
-    display: block;
-    width: 80%;
-    margin-top: 0.2rem;
-    padding: 0.7rem 0.5rem;
-    border-radius: 5px;
-    background-color: transparent;
-    border: 1px solid #DEDEDE;
-    font-size: 16px;
-    letter-spacing: 1px;
-}
-
 .izdavac-wrapper, .kupac-wrapper, .info-wrapper, .mesto-izdavanja-wrapper {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -99,8 +74,15 @@
     cursor: pointer;
 }
 
+
 .btn-sacuvaj-stavku {
     margin-right: 2rem;
+}
+.btn-sacuvaj-stavku:disabled{
+    cursor: not-allowed;
+    background-color: #ccc;
+    color:#292929;
+    border-color:#ccc;
 }
 
 .potvrdi-formu-wrapper {
@@ -117,11 +99,20 @@
     border-radius: 5px;
     cursor: pointer;
 }
+.potvrdi-formu-wrapper > button:disabled{
+    cursor: not-allowed;
+    background-color: #ccc;
+    color:#292929;
+    border-color:#ccc;
+}
+.potvrdi-formu-wrapper > button:disabled:hover{
+     background-color: #ccc;
+}
+
 
 .potvrdi-formu-wrapper > button:hover {
     background-color: #252525;
 }
-
 @media screen and (max-width: 1000px) {
   .izdavac-wrapper, .kupac-wrapper, .info-wrapper, .mesto-izdavanja-wrapper {
       grid-template-columns: repeat(2, 1fr);

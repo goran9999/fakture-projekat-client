@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router'
-import DetaljnaFaktura from '../components/faktura/DetaljnaFaktura';
+import DetaljnaFaktura from '../components/fakture/detaljnaFaktura/DetaljnaFaktura';
 import Faktura from '../models/faktura';
 import { FakturaContext } from '../store/faktura-context';
 
@@ -13,8 +13,9 @@ const FakturaDetaljiPage = () => {
 
     useEffect(() => {
         const faktura = fakturaContext.fakture.find(f => f.broj === brojFakture)
-
+        console.log(faktura)
         if (!faktura) {
+
             fetch(`http://localhost:5000/api/fakture/${brojFakture}`)
                 .then(res => res.json())
                 .then(data => {

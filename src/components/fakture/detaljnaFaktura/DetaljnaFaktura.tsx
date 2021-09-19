@@ -1,6 +1,6 @@
-import Faktura, { StatusFakture } from "../../models/faktura";
-import { formatirajCenu, formatirajDatum, izracunajUkupnuVrednostFakture, kapitalizujPrvoSlovo } from "../../utils/utils";
-import DodataStavkaItem from "../forma/DodataStavkaItem";
+import Faktura, { StatusFakture } from "../../../models/faktura";
+import { formatirajCenu, formatirajDatum, izracunajUkupnuVrednostFakture, kapitalizujPrvoSlovo } from "../../../utils/utils";
+import DodataStavkaItem from "../../forme/novaFaktura/DodataStavkaItem";
 import styles from './DetaljnaFaktura.module.css'
 
 interface Props {

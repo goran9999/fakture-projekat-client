@@ -13,8 +13,7 @@ export const FakturaContext = React.createContext<FakturaTip>({
     postaviFakture: (fakture: Faktura[]) => { }
 })
 
-const FakturaProvider: React.FC = props => {
-
+const FakturaProvider: React.FC = (props) => {
 
     const [fakture, setFakture] = useState<Faktura[]>([]);
 
@@ -29,7 +28,7 @@ const FakturaProvider: React.FC = props => {
     }
 
     const fakturaValue = {
-        fakture,
+        fakture: fakture,
         dodajFakturu: dodajFakturuHandler,
         postaviFakture: postaviFaktureHandler
     }
@@ -40,4 +39,5 @@ const FakturaProvider: React.FC = props => {
         </FakturaContext.Provider>
     )
 }
+
 export default FakturaProvider;

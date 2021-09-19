@@ -1,9 +1,8 @@
-import React from "react";
-import Faktura from "../../models/faktura";
-import FakturaItem from "./FakturaItem";
+import Faktura from "../../../models/faktura";
+import FakturaItem from "../fakturaItem/FakturaItem";
 
 import styles from './ListaFaktura.module.css'
-import { izracunajUkupnuVrednostFakture } from "../../utils/utils";
+import { izracunajUkupnuVrednostFakture } from "../../../utils/utils";
 
 interface Props {
     fakture: Faktura[],
@@ -18,9 +17,9 @@ const ListaFaktura = ({ fakture, onOmoguciFiltriranje }: Props) => {
                 <thead>
                     <tr className={styles.tr}>
                         <th className={styles.th}>Broj</th>
-                        <th className={styles.th}>Izdavac</th>
                         <th className={styles.th}>Kupac</th>
                         <th className={styles.th}>Datum izdavanja</th>
+                        <th className={styles.th}>Rok placanja</th>
                         <th className={styles.th}>Iznos</th>
                         <th className={styles.th}>Status</th>
                         <th className={styles.th}>
@@ -38,9 +37,9 @@ const ListaFaktura = ({ fakture, onOmoguciFiltriranje }: Props) => {
                         <FakturaItem
                             key={f.broj}
                             broj={f.broj}
-                            imeIzdavaca={f.izdavac.naziv}
                             imeKupca={f.kupac.naziv}
                             datumIzdavanja={f.datumIzdavanja}
+                            rokPlacanja={f.rokPlacanja}
                             valutaPlacanja={f.valutaPlacanja}
                             ukupanIznos={izracunajUkupnuVrednostFakture(f.stavke)}
                             status={f.status}

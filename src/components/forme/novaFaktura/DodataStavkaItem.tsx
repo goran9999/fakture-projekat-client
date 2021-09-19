@@ -1,7 +1,6 @@
-import React from 'react';
-import StavkaFakture from '../../models/stavkaFakture';
-import Valuta from '../../models/valuta';
-import { formatirajCenu, izracunajUkupnuVrednostStavke, kapitalizujPrvoSlovo } from '../../utils/utils';
+import StavkaFakture from '../../../models/stavkaFakture';
+import Valuta from '../../../models/valuta';
+import { formatirajCenu, izracunajUkupnuVrednostStavke, kapitalizujPrvoSlovo } from '../../../utils/utils';
 
 import styles from './NovaFakturaForma.module.css'
 
