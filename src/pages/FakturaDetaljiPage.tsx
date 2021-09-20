@@ -16,7 +16,17 @@ const FakturaDetaljiPage = () => {
         console.log(faktura)
         if (!faktura) {
 
-            fetch(`http://localhost:5000/api/fakture/${brojFakture}`)
+            const token = localStorage.getItem('token');
+
+            if(!token){
+                return;
+            }
+
+            fetch(`http://localhost:5000/api/fakture/${brojFakture}`,{
+                headers:{
+                    'auth-token': token.toString()
+                }
+            })
                 .then(res => res.json())
                 .then(data => {
                     setFaktura(data as Faktura);

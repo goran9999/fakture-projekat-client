@@ -3,7 +3,6 @@ import ListaFaktura from '../components/fakture/listaFaktura/ListaFaktura'
 import Faktura, { StatusFakture } from '../models/faktura'
 import { FakturaContext } from '../store/faktura-context'
 import Modal from '../UI/Modal/Modal'
-
 enum FilterStanje {
     SVE = 'sve',
     PRIPREMA = 'priprema',
@@ -24,7 +23,19 @@ const HomePage = () => {
 
         // ako u conteksu ima faktura -> nema potrebe da se pravi novi zahtev za podacima
         if (fakturaContext.fakture.length === 0) {
-            fetch('http://localhost:5000/api/fakture')
+
+           const token = localStorage.getItem('token');
+
+           if(!token){
+              return;
+
+           }
+
+            fetch('http://localhost:5000/api/fakture',{
+                headers:{
+                    'auth-token':token.toString()
+                }
+            })
                 .then(res => res.json())
                 .then(data => {
                     const fakture = data as Faktura[]

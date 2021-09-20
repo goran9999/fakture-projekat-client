@@ -34,10 +34,16 @@ const DodajKupcaForma = () => {
         }
 
         try {
+
+            const token = localStorage.getItem('token');
+            if(!token){
+                return;
+            }
             const response = await fetch('http://localhost:5000/api/sifarnik/', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'auth-token' : token.toString()
                 },
                 body: JSON.stringify(kupac)
             })

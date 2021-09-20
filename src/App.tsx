@@ -15,12 +15,19 @@ function App() {
 
   const { pathname: trenutnaPutanja } = useLocation()
 
-  const [autorizovan, setAutorizovan] = useState(true);
+  const [autorizovan, setAutorizovan] = useState(localStorage.getItem('token'));
   const history = useHistory();
 
   const uspesnaAutorizacijaHandler = () => {
-    setAutorizovan(true);
+    setAutorizovan(localStorage.getItem('token'));
     history.replace('/');
+  }
+
+  const logoutHandler = () => {
+    setAutorizovan(null);
+    localStorage.removeItem('token')
+    history.replace('/prijava')
+    window.location.reload();
   }
 
   return (
@@ -45,7 +52,7 @@ function App() {
             </li>
             <li>Statistika</li>
             <li>Podesavanja</li>
-            <li>Odjava</li>
+            <li><button type="submit" onClick={logoutHandler}>Odjava</button></li>
           </ul>
         </Sidebar>
       }
@@ -69,10 +76,10 @@ function App() {
           {autorizovan ? <FakturaDetaljiPage /> : <Redirect to='/registracija' />}
         </Route>
         <Route path='/' exact>
-          {autorizovan ? <HomePage /> : <Redirect to='/registracija' />}
+          {localStorage.getItem('token') ? <HomePage /> : <Redirect to='/prijava' />}
         </Route>
         <Route path='*'>
-          <NotFoundPage />
+          {autorizovan? <HomePage/> : <NotFoundPage /> }
         </Route>
       </Switch>
     </main>

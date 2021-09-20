@@ -13,12 +13,14 @@ import Adresa from '../../adresa/Adresa';
 import DodataStavkaItem from '../../forme/novaFaktura/DodataStavkaItem';
 import DodavanjeStavke from './DodavanjeStavke';
 import IzmenaDodateStavke from '../../forme/novaFaktura/IzmenaDodateStavke';
+import { IzdavacContext } from '../../../store/izdavac-context';
 
 const NovaFakturaForma = () => {
 
     const history = useHistory()
     const sifarnikContext = useContext(SifarnikContext);
-    const { dodajFakturu } = useContext(FakturaContext)
+    const izdavacContext = useContext(IzdavacContext);
+    const { dodajFakturu } = useContext(FakturaContext);
 
     const [broj, setBroj] = useState('');
     const [datumIzdavanja, setDatumIzdavanja] = useState('');
@@ -37,19 +39,20 @@ const NovaFakturaForma = () => {
 
     const sacuvajFakturuHandler = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
+        console.log(izdavacContext.izdavac);
         const faktura: Faktura = {
             // izdavac je ovde za sada radi testiranja
-            izdavac: {
-                maticniBroj: '12345',
-                pib: '81924712',
-                naziv: 'Google',
-                email: 'google@google.com',
-                sifra: '',
-                adresa: defaultAdresa,
-                telefon: '',
-                kupci: []
-            },
+            // izdavac: {
+            //     maticniBroj: '12345',
+            //     pib: '81924712',
+            //     naziv: 'Google',
+            //     email: 'google@google.com',
+            //     sifra: '',
+            //     adresa: defaultAdresa,
+            //     telefon: '',
+            //     kupci: []
+            // },
+            izdavac:izdavacContext.izdavac,
             broj: broj,
             datumIzdavanja: new Date(datumIzdavanja),
             rokPlacanja: new Date(rokPlacanja),
@@ -61,10 +64,16 @@ const NovaFakturaForma = () => {
         }
 
         try {
+
+            const token = localStorage.getItem('token');
+            if(!token){
+                return;
+            }
             const response = await fetch('http://localhost:5000/api/fakture', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'auth-token' : token.toString()
                 },
                 body: JSON.stringify(faktura)
             });
@@ -95,7 +104,7 @@ const NovaFakturaForma = () => {
                     console.log('Greska prilikom vracanja kupaca');
                     console.log(resJson.message)
                 } else {
-                    kupci = resJson[0].kupci as Kupac[];
+                    kupci = resJson.kupci as Kupac[];
                     sifarnikContext.postaviKupce(kupci)
                 }
             } catch (e) {

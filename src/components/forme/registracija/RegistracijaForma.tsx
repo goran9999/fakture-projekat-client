@@ -3,7 +3,7 @@ import { useHistory } from "react-router";
 import Izdavac from "../../../models/izdavac";
 
 interface Props {
-    onUspesnaRegistracija: () => void
+    onUspesnaRegistracija: (token?:string) => void
 }
 
 const RegistracijaForma = ({ onUspesnaRegistracija }: Props) => {

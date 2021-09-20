@@ -11,10 +11,19 @@ const SifarnikPage = () => {
 
     useEffect(() => {
         if (sifarnikContext.kupci.length === 0) {
-            fetch('http://localhost:5000/api/sifarnik')
+
+            const token = localStorage.getItem('token');
+            if(!token){
+                return;
+            }
+            fetch('http://localhost:5000/api/sifarnik',{
+                headers:{
+                    'auth-token': token.toString()
+                }
+            })
                 .then(res => res.json())
                 .then(data => {
-                    const kupci = data[0].kupci as Kupac[]
+                    const kupci = data.kupci as Kupac[]
                     sifarnikContext.postaviKupce(kupci)
                     setKupci(kupci);
                 })
