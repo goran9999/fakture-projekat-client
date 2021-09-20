@@ -21,11 +21,34 @@ li {
 
 a {
     text-decoration: none;
-    color: #FDFAF6;
+    color: black;
 }
 
 form {
     padding: 2rem;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+tr:nth-child(even) {
+    background-color: #EFEFEF;
+}
+
+th {
+    padding: 1rem 2rem;
+    text-align: center;
+    font-size: 14px;
+    background-color: #171717;
+    color: #DEDEDE;
+    font-weight: normal;
+}
+
+td {
+    padding: 1rem 2rem;
+    text-align: center;
+    font-size: 14px;
 }
 
 .form-element {

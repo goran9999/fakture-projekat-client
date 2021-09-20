@@ -3,33 +3,35 @@ import FakturaItem from "../fakturaItem/FakturaItem";
 
 import styles from './ListaFaktura.module.css'
 import { izracunajUkupnuVrednostFakture } from "../../../utils/utils";
+import { Link } from "react-router-dom";
 
 interface Props {
     fakture: Faktura[],
     onOmoguciFiltriranje: () => void,
+    primenjenFilter: string
 }
 
-const ListaFaktura = ({ fakture, onOmoguciFiltriranje }: Props) => {
+const ListaFaktura = ({ fakture, onOmoguciFiltriranje, primenjenFilter }: Props) => {
 
     return (
-        <div style={{ padding: '3rem 2rem' }}>
-            <table className={styles.table}>
+        <div style={{ padding: '3rem 2rem', width: '100%' }}>
+            <table>
                 <thead>
-                    <tr className={styles.tr}>
-                        <th className={styles.th}>Broj</th>
-                        <th className={styles.th}>Kupac</th>
-                        <th className={styles.th}>Datum izdavanja</th>
-                        <th className={styles.th}>Rok placanja</th>
-                        <th className={styles.th}>Iznos</th>
-                        <th className={styles.th}>Status</th>
-                        <th className={styles.th}>
+                    <tr>
+                        <th>Broj</th>
+                        <th>Kupac</th>
+                        <th>Datum izdavanja</th>
+                        <th>Rok placanja</th>
+                        <th>Iznos</th>
+                        <th>Status</th>
+                        <th>
                             <button
                                 className={styles['btn-filter']}
                                 onClick={onOmoguciFiltriranje}
                             >Filtriraj
                             </button>
                         </th>
-                        <th className={styles.th}></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -50,7 +52,13 @@ const ListaFaktura = ({ fakture, onOmoguciFiltriranje }: Props) => {
             </table>
             {fakture.length === 0 &&
                 <p style={{ padding: '2rem 0', textAlign: 'center' }}>
-                    Nijedna faktura ne zadovoljava postavljeni uslov
+                    {primenjenFilter !== 'sve' ?
+                        'Nijedna faktura ne zadovoljava postavljeni uslov' :
+                        <>
+                            <span>Nemate kreiranih faktura. </span>
+                            <Link to='/dodaj-fakturu'>Napravite novu!</Link>
+                        </>
+                    }
                 </p>
             }
         </div>

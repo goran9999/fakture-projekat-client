@@ -27,20 +27,20 @@ const DodataStavkaItem = (props: Props) => {
 
     return (
         <tr>
-            <td className={styles.td}>{sifra}</td>
-            <td className={styles.td}>{naziv}</td>
-            <td className={styles.td}>{kapitalizujPrvoSlovo(tip)}</td>
-            <td className={styles.td}>{kolicina}</td>
-            <td className={styles.td}>{formatirajCenu(osnovnaCena, props.valutaPlacanja)}</td>
-            <td className={styles.td}>{pdv}</td>
-            <td className={styles.td}>{osnovnaCena * pdv / 100}</td>
-            <td className={styles.td}>{formatirajCenu(izracunajUkupnuVrednostStavke(props.stavka), props.valutaPlacanja)}</td>
+            <td>{sifra}</td>
+            <td>{naziv}</td>
+            <td>{kapitalizujPrvoSlovo(tip)}</td>
+            <td>{kolicina}</td>
+            <td>{formatirajCenu(osnovnaCena, props.valutaPlacanja)}</td>
+            <td>{pdv}</td>
+            <td>{osnovnaCena * pdv / 100}</td>
+            <td>{formatirajCenu(izracunajUkupnuVrednostStavke(props.stavka), props.valutaPlacanja)}</td>
             {props.omoguciIzmenu &&
                 <>
-                    <td className={styles.td}>
+                    <td>
                         <button className={styles['btn-izmeni']} type='button' onClick={izmeniStavkuHandler}>Izmeni</button>
                     </td>
-                    <td className={styles.td}>
+                    <td>
                         <button className={styles['btn-ukloni']} type='button' onClick={ukloniStavkuHandler}>Ukloni</button>
                     </td>
                 </>

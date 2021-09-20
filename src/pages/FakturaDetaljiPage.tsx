@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router'
-import DetaljnaFaktura from '../components/fakture/detaljnaFaktura/DetaljnaFaktura';
+import FakturaDetalji from '../components/fakture/detaljnaFaktura/FakturaDetalji';
 import Faktura from '../models/faktura';
 import { FakturaContext } from '../store/faktura-context';
 
@@ -13,10 +13,13 @@ const FakturaDetaljiPage = () => {
 
     useEffect(() => {
         const faktura = fakturaContext.fakture.find(f => f.broj === brojFakture)
-        console.log(faktura)
         if (!faktura) {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                return;
+            }
 
-            fetch(`http://localhost:5000/api/fakture/${brojFakture}`)
+            fetch(`http://localhost:5000/api/fakture/${brojFakture}`, { headers: { 'auth-token': token.toString() } })
                 .then(res => res.json())
                 .then(data => {
                     setFaktura(data as Faktura);
@@ -29,8 +32,8 @@ const FakturaDetaljiPage = () => {
 
 
     return (
-        <div>
-            {faktura && <DetaljnaFaktura faktura={faktura} />}
+        <div style={{ padding: '3rem 10rem', width: '100%' }}>
+            {faktura && <FakturaDetalji faktura={faktura} />}
         </div>
     )
 }

@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useHistory } from 'react-router';
 import AdresaModel, { defaultAdresa } from '../../../models/adresa';
 import Faktura, { StatusFakture } from '../../../models/faktura';
-import Kupac from '../../../models/kupac';
+import Kupac, { defaultKupac } from '../../../models/kupac';
 import StavkaFakture, { defaultStavkaFakture } from '../../../models/stavkaFakture';
 import Valuta from '../../../models/valuta';
 import { FakturaContext } from '../../../store/faktura-context';
@@ -13,12 +13,14 @@ import Adresa from '../../adresa/Adresa';
 import DodataStavkaItem from '../../forme/novaFaktura/DodataStavkaItem';
 import DodavanjeStavke from './DodavanjeStavke';
 import IzmenaDodateStavke from '../../forme/novaFaktura/IzmenaDodateStavke';
+import { IzdavacContext } from '../../../store/izdavac-context';
 
 const NovaFakturaForma = () => {
 
     const history = useHistory()
     const sifarnikContext = useContext(SifarnikContext);
-    const { dodajFakturu } = useContext(FakturaContext)
+    const izdavacContext = useContext(IzdavacContext);
+    const { dodajFakturu } = useContext(FakturaContext);
 
     const [broj, setBroj] = useState('');
     const [datumIzdavanja, setDatumIzdavanja] = useState('');
@@ -27,7 +29,7 @@ const NovaFakturaForma = () => {
     const [mestoIzdavanja, setMestoIzdavanja] = useState<AdresaModel>(defaultAdresa)
     const [stavkeFakture, setStavkeFakture] = useState<StavkaFakture[]>([]);
 
-    const [kupac, setKupac] = useState<Kupac>();
+    const [kupac, setKupac] = useState(defaultKupac);
     const [maticniBrojKupca, setMaticniBrojKupca] = useState('');
     const [prikaziModalZaIzborKupca, setPrikaziModalZaIzborKupca] = useState(false);
     const [prikaziModalZaDodavanjeStavke, setPrikaziModalZaDodavanjeStavke] = useState(false);
@@ -37,7 +39,11 @@ const NovaFakturaForma = () => {
 
     useEffect(() => {
         if (sifarnikContext.kupci.length === 0) {
-            fetch('http://localhost:5000/api/sifarnik')
+            const token = localStorage.getItem('token');
+            if (!token) {
+                return;
+            }
+            fetch('http://localhost:5000/api/sifarnik', { headers: { 'auth-token': token.toString() } })
                 .then(res => res.json())
                 .then(data => {
                     sifarnikContext.postaviKupce(data as Kupac[])
@@ -50,34 +56,30 @@ const NovaFakturaForma = () => {
 
     const sacuvajFakturuHandler = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
+        console.log(izdavacContext.izdavac);
         const faktura: Faktura = {
-            // izdavac je ovde za sada radi testiranja
-            izdavac: {
-                maticniBroj: '12345',
-                pib: '81924712',
-                naziv: 'Google',
-                email: 'google@google.com',
-                sifra: '',
-                adresa: defaultAdresa,
-                telefon: '',
-                kupci: []
-            },
+            izdavac: izdavacContext.izdavac,
             broj: broj,
             datumIzdavanja: new Date(datumIzdavanja),
             rokPlacanja: new Date(rokPlacanja),
             valutaPlacanja: valutaPlacanja,
             mestoIzdavanja: mestoIzdavanja,
             stavke: stavkeFakture,
-            kupac: kupac!,
+            kupac: kupac,
             status: StatusFakture.POSLATA
         }
 
         try {
+
+            const token = localStorage.getItem('token');
+            if (!token) {
+                return;
+            }
             const response = await fetch('http://localhost:5000/api/fakture', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'auth-token': token.toString()
                 },
                 body: JSON.stringify(faktura)
             });
@@ -188,24 +190,24 @@ const NovaFakturaForma = () => {
             <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <div className='form-element'>
                     <label>Maticni broj</label>
-                    <input value={kupac?.maticniBroj} disabled />
+                    <input value={kupac.maticniBroj} disabled />
                 </div>
 
                 <div className='form-element'>
                     <label>PIB</label>
-                    <input value={kupac?.pib} disabled />
+                    <input value={kupac.pib} disabled />
                 </div>
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <div className='form-element'>
                     <label>Naziv</label>
-                    <input value={kupac?.naziv} disabled />
+                    <input value={kupac.naziv} disabled />
                 </div>
 
                 <div className='form-element'>
                     <label>E-mail</label>
-                    <input value={kupac?.email} disabled />
+                    <input value={kupac.email} disabled />
                 </div>
 
             </div>
@@ -213,23 +215,23 @@ const NovaFakturaForma = () => {
             <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <div className='form-element'>
                     <label>Postanski broj</label>
-                    <input value={kupac?.adresa.postBroj} disabled />
+                    <input value={kupac.adresa.postBroj} disabled />
                 </div>
 
                 <div className='form-element'>
                     <label>Grad</label>
-                    <input value={kupac?.adresa.grad} disabled />
+                    <input value={kupac.adresa.grad} disabled />
                 </div>
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <div className='form-element'>
                     <label>Ulica</label>
-                    <input value={kupac?.adresa.ulica} disabled />
+                    <input value={kupac.adresa.ulica} disabled />
                 </div>
                 <div className='form-element'>
                     <label>Broj ulice</label>
-                    <input value={kupac?.adresa.brUlice} disabled />
+                    <input value={kupac.adresa.brUlice} disabled />
                 </div>
             </div>
 

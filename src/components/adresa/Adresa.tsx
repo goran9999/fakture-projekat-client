@@ -12,8 +12,6 @@ const Adresa = ({ onChange, obaveznaPolja }: Props) => {
 
     const [adresa, setAdresa] = useState(defaultAdresa)
 
-    //Validacija adrese
-
     const { upisanaVrednost: grad, imaGreske: gradPogresan,
         vrednostPromenjena: promeniGrad, fokusUklonjen: onBlurGrad } =
         useValidation(value => value.trim().length !== 0);
@@ -31,8 +29,6 @@ const Adresa = ({ onChange, obaveznaPolja }: Props) => {
     const { upisanaVrednost: ulica, imaGreske: ulicaPogresna, vrednostPromenjena: promeniUlicu,
         fokusUklonjen: ulicaFokusUklonjen }
         = useValidation(value => value.trim().length !== 0);
-
-
 
 
     const promeniAdresuHandler = (e: React.ChangeEvent<HTMLInputElement>) => {

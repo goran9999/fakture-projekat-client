@@ -25,19 +25,19 @@ const FakturaItem = ({ broj, imeKupca, datumIzdavanja, rokPlacanja, valutaPlacan
 
     return (
         <tr className={styles.tr}>
-            <td className={styles.td}>#{broj}</td>
-            <td className={styles.td}>{imeKupca}</td>
+            <td>#{broj}</td>
+            <td>{imeKupca}</td>
             {/* neki bag sa typescript datumima pa je moralo ovako */}
-            <td className={styles.td}>{formatirajDatum(new Date(datumIzdavanja.toString()))}</td>
-            <td className={styles.td}>{formatirajDatum(new Date(rokPlacanja.toString()))}</td>
-            <td className={styles.td}>{formatirajCenu(ukupanIznos, valutaPlacanja)}</td>
-            <td className={styles.td}>
+            <td>{formatirajDatum(new Date(datumIzdavanja.toString()))}</td>
+            <td>{formatirajDatum(new Date(rokPlacanja.toString()))}</td>
+            <td>{formatirajCenu(ukupanIznos, valutaPlacanja)}</td>
+            <td>
                 <span className={`${styles.status} ${styles[vratiCssKlasuStatusaFakture(status)]}`}>
                     {kapitalizujPrvoSlovo(status)}
                 </span>
             </td>
-            <td className={styles.td}><button className={styles['btn-detalji']} onClick={vidiDetaljeHandler}>Detalji</button></td>
-            <td className={styles.td}><button className={styles['btn-detalji']} onClick={vidiDetaljeHandler}>Storniraj</button></td>
+            <td><button className={styles['btn-detalji']} onClick={vidiDetaljeHandler}>Detalji</button></td>
+            <td><button className={styles['btn-detalji']} onClick={vidiDetaljeHandler}>Storniraj</button></td>
         </tr>
     )
 }

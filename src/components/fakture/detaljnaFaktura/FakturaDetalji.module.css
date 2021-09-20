@@ -1,0 +1,15 @@
+.zaglavlje {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 3rem;
+}
+
+.kupac-wrapper {
+    margin-top: 3rem;
+}
+
+.stavke-wrapper {
+    margin-top: 3rem;
+    display: flex;
+    justify-content: center;
+}

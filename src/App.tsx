@@ -7,20 +7,42 @@ import SifarnikPage from './pages/SifarnikPage';
 import DodajKupcaPage from './pages/DodajKupcaPage'
 import './App.css'
 import Sidebar from './UI/Sidebar/Sidebar';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import RegistracijaForma from './components/forme/registracija/RegistracijaForma';
 import PrijavaForma from './components/forme/prijava/PrijavaForma';
+import { IzdavacContext } from './store/izdavac-context';
+import Izdavac from './models/izdavac';
 
 function App() {
 
   const { pathname: trenutnaPutanja } = useLocation()
 
-  const [autorizovan, setAutorizovan] = useState(true);
+  const [autorizovan, setAutorizovan] = useState(localStorage.getItem('token'));
   const history = useHistory();
 
+  const izdavacContext = useContext(IzdavacContext);
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      return;
+    }
+    fetch('http://localhost:5000/api/user', { headers: { 'auth-token': token.toString() } })
+      .then(res => res.json())
+      .then(data => {
+        izdavacContext.dodajIzdavaca(data as Izdavac)
+      })
+  }, [])
+
   const uspesnaAutorizacijaHandler = () => {
-    setAutorizovan(true);
+    setAutorizovan(localStorage.getItem('token'));
     history.replace('/');
+  }
+
+  const logoutHandler = () => {
+    setAutorizovan(null);
+    localStorage.clear();
+    history.replace('/prijava')
+    window.location.reload();
   }
 
   return (
@@ -45,7 +67,7 @@ function App() {
             </li>
             <li>Statistika</li>
             <li>Podesavanja</li>
-            <li>Odjava</li>
+            <li onClick={logoutHandler}>Odjava</li>
           </ul>
         </Sidebar>
       }
@@ -69,7 +91,7 @@ function App() {
           {autorizovan ? <FakturaDetaljiPage /> : <Redirect to='/registracija' />}
         </Route>
         <Route path='/' exact>
-          {autorizovan ? <HomePage /> : <Redirect to='/registracija' />}
+          {autorizovan ? <HomePage /> : <Redirect to='/prijava' />}
         </Route>
         <Route path='*'>
           <NotFoundPage />

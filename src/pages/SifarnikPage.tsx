@@ -1,57 +1,35 @@
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect } from "react"
 import { Link } from "react-router-dom"
-import styles from '../components/fakture/listaFaktura/ListaFaktura.module.css'
+import Sifarnik from "../components/sifarnik/Sifarnik";
 import Kupac from "../models/kupac";
 import { SifarnikContext } from "../store/sifarnikContext";
 
 const SifarnikPage = () => {
 
     const sifarnikContext = useContext(SifarnikContext)
-    const [kupci, setKupci] = useState<Kupac[]>([]);
 
     useEffect(() => {
+
         if (sifarnikContext.kupci.length === 0) {
-            fetch('http://localhost:5000/api/sifarnik')
+
+            const token = localStorage.getItem('token');
+            if (!token) {
+                return;
+            }
+
+            fetch('http://localhost:5000/api/sifarnik', { headers: { 'auth-token': token.toString() } })
                 .then(res => res.json())
                 .then(data => {
-                    const kupci = data as Kupac[]
-                    sifarnikContext.postaviKupce(kupci)
-                    setKupci(kupci);
+                    sifarnikContext.postaviKupce(data as Kupac[])
                 })
-        } else {
-            setKupci(sifarnikContext.kupci)
         }
 
     }, [sifarnikContext])
 
     return (
-        <div style={{ padding: '3rem 2rem' }}>
-            <table className={styles.table}>
-                <thead>
-                    <tr className={styles.tr}>
-                        <th className={styles.th}>Mat. broj</th>
-                        <th className={styles.th}>PIB</th>
-                        <th className={styles.th}>Naziv</th>
-                        <th className={styles.th}>E-mail</th>
-                        <th className={styles.th}>Telefon</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {kupci.map((k) =>
-                        <tr key={k.maticniBroj}>
-                            <td className={styles.td}>{k.maticniBroj}</td>
-                            <td className={styles.td}>{k.pib || '/'}</td>
-                            <td className={styles.td}>{k.naziv}</td>
-                            <td className={styles.td}>{k.email}</td>
-                            <td className={styles.td}>{k.telefon}</td>
-                        </tr>
-                    )}
-                </tbody>
-
-            </table>
-
-            <Link style={{ color: 'black' }} to='/sifarnik/dodaj-kupca'>Dodaj kupca</Link>
-
+        <div style={{ padding: '3rem 2rem', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <Sifarnik kupci={sifarnikContext.kupci} />
+            <Link to='/sifarnik/dodaj-kupca'>Dodaj kupca</Link>
         </div>
     )
 }
