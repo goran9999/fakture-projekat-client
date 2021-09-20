@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useHistory } from 'react-router';
 import AdresaModel, { defaultAdresa } from '../../../models/adresa';
 import Faktura, { StatusFakture } from '../../../models/faktura';
@@ -34,6 +34,19 @@ const NovaFakturaForma = () => {
     const [prikaziModalZaIzmenuStavke, setPrikaziModalZaIzmenuStavke] = useState(false);
     const [stavkaZaIzmenu, setStavkaZaIzmenu] = useState<StavkaFakture>(defaultStavkaFakture);
 
+
+    useEffect(() => {
+        if (sifarnikContext.kupci.length === 0) {
+            fetch('http://localhost:5000/api/sifarnik')
+                .then(res => res.json())
+                .then(data => {
+                    sifarnikContext.postaviKupce(data as Kupac[])
+                })
+                .catch(e => {
+                    console.log(e);
+                })
+        }
+    }, [sifarnikContext])
 
     const sacuvajFakturuHandler = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -85,25 +98,7 @@ const NovaFakturaForma = () => {
     }
 
     const postaviKupcaHandler = async () => {
-
-        let kupci = sifarnikContext.kupci;
-        if (kupci.length === 0) {
-            try {
-                const response = await fetch('http://localhost:5000/api/sifarnik');
-                const resJson = await response.json();
-                if (!response.ok) {
-                    console.log('Greska prilikom vracanja kupaca');
-                    console.log(resJson.message)
-                } else {
-                    kupci = resJson[0].kupci as Kupac[];
-                    sifarnikContext.postaviKupce(kupci)
-                }
-            } catch (e) {
-                console.log(e);
-            }
-        }
-
-        const kupac = kupci.find(k => k.maticniBroj === maticniBrojKupca);
+        const kupac = sifarnikContext.kupci.find(k => k.maticniBroj === maticniBrojKupca);
         if (!kupac) {
             alert(`Kupac sa maticnim brojem ${maticniBrojKupca} ne postoji u vasem sifarniku`)
         } else {

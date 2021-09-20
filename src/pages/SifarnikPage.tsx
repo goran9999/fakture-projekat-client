@@ -14,7 +14,7 @@ const SifarnikPage = () => {
             fetch('http://localhost:5000/api/sifarnik')
                 .then(res => res.json())
                 .then(data => {
-                    const kupci = data[0].kupci as Kupac[]
+                    const kupci = data as Kupac[]
                     sifarnikContext.postaviKupce(kupci)
                     setKupci(kupci);
                 })
