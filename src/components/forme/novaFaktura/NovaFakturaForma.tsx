@@ -142,6 +142,27 @@ const NovaFakturaForma = () => {
         setPrikaziModalZaIzmenuStavke(false);
     }
 
+    const promeniDatumIzdavanjaHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const datum = e.target.value;
+        if (!rokPlacanja) {
+            setDatumIzdavanja(datum);
+            setRokPlacanja(datum);
+        } else if (datum > rokPlacanja) {
+            alert('Datum izdavanja ne moze biti veci od roka placanja')
+        } else {
+            setDatumIzdavanja(datum);
+        }
+    }
+
+    const promeniRokPlacanjaHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const datum = e.target.value;
+        if (datumIzdavanja && datum < datumIzdavanja) {
+            alert('Rok placanja mora biti veci od datuma izdavanja')
+        } else {
+            setRokPlacanja(datum);
+        }
+    }
+
     return (
         <form style={{ width: '100%', textAlign: 'center' }} onSubmit={sacuvajFakturuHandler}>
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -160,12 +181,12 @@ const NovaFakturaForma = () => {
 
                 <div className='form-element'>
                     <label htmlFor="datumIzdavanja">Datum izdavanja *</label>
-                    <input id='datumIzdavanja' type='date' value={datumIzdavanja} onChange={(e) => setDatumIzdavanja(e.target.value)} />
+                    <input id='datumIzdavanja' type='date' value={datumIzdavanja} onChange={promeniDatumIzdavanjaHandler} />
                 </div>
 
                 <div className='form-element'>
                     <label htmlFor="rokPlacanja">Rok placanja *</label>
-                    <input id='rokPlacanja' type='date' value={rokPlacanja} onChange={(e) => setRokPlacanja(e.target.value)} />
+                    <input id='rokPlacanja' type='date' value={rokPlacanja} onChange={promeniRokPlacanjaHandler} />
                 </div>
 
             </div>
