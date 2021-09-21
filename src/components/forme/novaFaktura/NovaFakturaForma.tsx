@@ -155,11 +155,11 @@ const NovaFakturaForma = () => {
     }
 
     const promeniRokPlacanjaHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const datum = e.target.value;
-        if (datumIzdavanja && datum < datumIzdavanja) {
+        const rok = e.target.value;
+        if (datumIzdavanja && rok < datumIzdavanja) {
             alert('Rok placanja mora biti veci od datuma izdavanja')
         } else {
-            setRokPlacanja(datum);
+            setRokPlacanja(rok);
         }
     }
 
